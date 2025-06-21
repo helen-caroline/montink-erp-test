@@ -3,12 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Montink ERP - Início</title>
+    <link rel="stylesheet" href="../app/css/index.css">
 </head>
 <body>
-    <h1>Bem-vindo ao Montink ERP</h1>
-    <ul>
-        <li><a href="../app/views/listar_produtos.html">Listar Produtos</a></li>
-        <li><a href="../app/views/cadastrar_produto.html">Cadastrar Produto</a></li>
-    </ul>
+    <div class="painel">
+        <h1>Montink ERP</h1>
+        <p class="subtitulo">Bem-vindo ao seu painel de gestão</p>
+        <div class="atalhos">
+            <a href="../app/views/listar_produtos.html" class="card">
+                <span class="icon">📦</span>
+                <span>Listar Produtos</span>
+            </a>
+            <a href="../app/views/cadastrar_produto.html" class="card">
+                <span class="icon">➕</span>
+                <span>Cadastrar Produto</span>
+            </a>
+        </div>
+    </div>
 </body>
 </html>
