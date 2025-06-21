@@ -1,0 +1,25 @@
+<?php
+// app.php
+
+require_once __DIR__ . '/routers/router.produtos.php';
+
+function handleRequest() {
+    $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    $method = $_SERVER['REQUEST_METHOD'];
+
+    // Rotas de produtos
+    if (strpos($uri, '/produtos') === 0) {
+        handleProdutosRoutes($uri, $method);
+        return;
+    }
+
+    if ($uri === '/hello' && $method === 'GET') {
+        header('Content-Type: application/json');
+        echo json_encode(['message' => 'Hello World']);
+        exit;
+    }
+
+    // 404 para outras rotas
+    http_response_code(404);
+    echo json_encode(['error' => 'Not Found']);
+}
