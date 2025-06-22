@@ -2,14 +2,31 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastrar Produto</title>
+    <title>Produtos</title>
+    <link rel="stylesheet" href="../css/listar_produtos.css">
     <link rel="stylesheet" href="../css/cadastrar_produto.css">
 </head>
 <body>
     <div class="container">
+        <h1>Lista de Produtos</h1>
+        <button id="btn-refresh" class="btn-cadastrar" type="button">🔄 Atualizar Lista</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Preço</th>
+                    <th>Estoque</th>
+                </tr>
+            </thead>
+            <tbody id="produtos-tbody">
+                <!-- Produtos via JS -->
+            </tbody>
+        </table>
+        <hr style="margin: 32px 0;">
         <h1>Cadastrar Produto</h1>
         <div id="mensagem-cadastro"></div>
-        <form>
+        <form id="form-cadastrar-produto">
             <div class="campo">
                 <label for="nome">Nome do Produto</label>
                 <input type="text" id="nome" name="nome" placeholder="Digite o nome do produto" required>
@@ -25,10 +42,9 @@
             <button type="submit" class="btn-salvar">Cadastrar</button>
         </form>
         <div class="botoes-voltar">
-            <a class="voltar" href="listar_produtos.html">← Voltar para lista de produtos</a>
             <a class="voltar" href="../../public/index.html">🏠 Voltar para o início</a>
         </div>
     </div>
-    <script src="../js/cadastrar_produto.js"></script>
+    <script src="../js/produtos.js"></script>
 </body>
 </html>
