@@ -29,6 +29,7 @@ h1 {
     font-size: 17px;
     font-weight: 600;
     transition: background 0.2s, transform 0.2s;
+    cursor: pointer;
 }
 .btn-cadastrar:hover {
     background: #388e3c;
@@ -66,6 +67,13 @@ tr:hover {
     gap: 8px;
     margin-top: 28px;
 }
+
+#btn-refresh {
+    display: block;
+    margin: 0 auto 24px auto;
+    cursor: pointer;
+}
+
 .voltar {
     display: block;
     text-align: center;

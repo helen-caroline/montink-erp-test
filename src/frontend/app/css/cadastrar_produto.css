@@ -82,3 +82,57 @@ input[type="number"]:focus {
     color: #388e3c;
     text-decoration: underline;
 }
+
+#variacoes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.variacao-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.variacao-row input[type="text"],
+.variacao-row input[type="number"] {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.remover-variacao {
+    background: #e53935;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 7px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.remover-variacao:hover {
+    background: #b71c1c;
+}
+
+#adicionar-variacao {
+    background: #1976d2;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 8px;
+    margin-top: 4px;
+    transition: background 0.2s, transform 0.2s;
+}
+
+#adicionar-variacao:hover {
+    background: #0d47a1;
+    transform: translateY(-1px) scale(1.03);
+}
