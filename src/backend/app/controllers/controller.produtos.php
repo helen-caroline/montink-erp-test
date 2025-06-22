@@ -58,3 +58,23 @@ function deleteProduto() {
     }
     exit;
 }
+
+function deleteVariacao() {
+    header('Access-Control-Allow-Origin: *');
+    $data = json_decode(file_get_contents('php://input'), true);
+
+    if (!isset($data['id'])) {
+        http_response_code(400);
+        echo json_encode(['error' => 'ID da variação não informado']);
+        exit;
+    }
+
+    $ok = deleteVariacaoById($data['id']);
+    if ($ok) {
+        echo json_encode(['success' => true]);
+    } else {
+        http_response_code(500);
+        echo json_encode(['error' => 'Erro ao deletar variação']);
+    }
+    exit;
+}

@@ -91,3 +91,18 @@ function deleteProdutoById($id) {
         return false;
     }
 }
+
+function deleteVariacaoById($id) {
+    global $user, $pass, $dsn;
+    try {
+        $pdo = new PDO($dsn, $user, $pass);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $stmt = $pdo->prepare('DELETE FROM variacoes WHERE id = ?');
+        $stmt->execute([$id]);
+
+        return $stmt->rowCount() > 0;
+    } catch (PDOException $e) {
+        return false;
+    }
+}

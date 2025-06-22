@@ -19,18 +19,25 @@ function handleProdutosRoutes($uri, $method) {
         exit;
     }
 
+    // Rotas : GET
     if ($uri === '/produtos/view' && $method === 'GET') {
         viewProdutos();
         return;
     }
     
+    // Rotas : POST
     if ($uri === '/produtos/create' && $method === 'POST') {
         createProduto();
         return;
     }
 
+    // Rotas : DELETE
     if ($uri === '/produtos/delete' && ($method === 'DELETE' || $method === 'POST')) {
         deleteProduto();
+        return;
+    }
+    if ($uri === '/produtos/variacao/delete' && ($method === 'DELETE' || $method === 'POST')) {
+        deleteVariacao();
         return;
     }
 }

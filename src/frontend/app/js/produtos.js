@@ -7,12 +7,13 @@ async function carregarProdutos() {
 
     if (data.produtos && data.produtos.length > 0) {
         data.produtos.forEach(produto => {
-            // Monta string das variações
+            // Monta string das variações com botão de deletar
             let variacoesStr = '-';
             if (produto.variacoes && produto.variacoes.length > 0) {
-                variacoesStr = produto.variacoes.map(v => 
-                    `${v.nome}: ${v.valor} (Estoque: ${v.quantidade})`
-                ).join('<br>');
+                variacoesStr = produto.variacoes.map(v => `
+                    ${v.nome}: ${v.valor}
+                    <button class="btn-deletar-variacao" data-id="${v.id}" title="Deletar variação">🗑️</button>
+                `).join('<br>');
             }
     
             const tr = document.createElement('tr');
@@ -20,16 +21,16 @@ async function carregarProdutos() {
                 <td>${produto.id}</td>
                 <td>${produto.nome}</td>
                 <td>R$ ${parseFloat(produto.preco).toFixed(2)}</td>
-                <td>${produto.estoque ?? '-'}</td>
+                <td>${produto.estoque}</td>
                 <td>${variacoesStr}</td>
                 <td>
-                    <button class="btn-deletar" data-id="${produto.id}" style="background:#e53935;color:#fff;border:none;border-radius:4px;padding:7px 10px;cursor:pointer;">Deletar</button>
+                    <button class="btn-deletar" data-id="${produto.id}">Deletar</button>
                 </td>
             `;
             tbody.appendChild(tr);
         });
     
-        // Adiciona evento aos botões de deletar
+        // Adiciona evento aos botões de deletar produto
         document.querySelectorAll('.btn-deletar').forEach(btn => {
             btn.addEventListener('click', async function() {
                 const id = this.getAttribute('data-id');
@@ -43,6 +44,26 @@ async function carregarProdutos() {
                         carregarProdutos();
                     } else {
                         alert('Erro ao deletar produto.');
+                    }
+                }
+            });
+        });
+    
+        // Adiciona evento aos botões de deletar variação
+        document.querySelectorAll('.btn-deletar-variacao').forEach(btn => {
+            btn.addEventListener('click', async function(e) {
+                e.stopPropagation();
+                const id = this.getAttribute('data-id');
+                if (confirm('Deseja realmente deletar esta variação?')) {
+                    const resp = await fetch('http://localhost:8000/produtos/variacao/delete', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id })
+                    });
+                    if (resp.ok) {
+                        carregarProdutos();
+                    } else {
+                        alert('Erro ao deletar variação.');
                     }
                 }
             });
