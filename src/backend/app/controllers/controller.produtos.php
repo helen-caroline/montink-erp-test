@@ -4,6 +4,7 @@
 require_once __DIR__ . '/../models/model.produtos.php';
 
 function viewProdutos() {
+    header('Access-Control-Allow-Origin: *'); // <-- Adicione esta linha
     $produtos = getAllProdutos();
     header('Content-Type: application/json');
     echo json_encode(['produtos' => $produtos]);
@@ -11,6 +12,7 @@ function viewProdutos() {
 }
 
 function createProduto() {
+    header('Access-Control-Allow-Origin: *');
     $data = json_decode(file_get_contents('php://input'), true);
 
     if (!isset($data['nome']) || !isset($data['preco']) || !isset($data['estoque'])) {
