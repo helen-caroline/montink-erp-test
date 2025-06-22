@@ -83,7 +83,7 @@ document.getElementById('adicionar-variacao').addEventListener('click', function
     row.innerHTML = `
         <input type="text" class="variacao-nome" placeholder="Nome da variação (ex: Personalizado)">
         <input type="text" class="variacao-valor" placeholder="Valor (ex: Nome do cliente)">
-        <button type="button" class="remover-variacao">Remover</button>
+        <button type="button" class="remover-variacao" title="Remover variação">🗑️</button>
     `;
     row.querySelector('.remover-variacao').onclick = () => row.remove();
     container.appendChild(row);

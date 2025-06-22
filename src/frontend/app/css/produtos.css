@@ -7,41 +7,48 @@ body {
 }
 
 .container {
-    max-width: 950px;
-    margin: 50px auto;
+    max-width: 980px;
+    margin: 54px auto;
     background: #fff;
-    padding: 36px 28px 32px 28px;
-    border-radius: 18px;
-    box-shadow: 0 8px 32px rgba(44,62,80,0.10);
+    padding: 40px 32px 36px 32px;
+    border-radius: 22px;
+    box-shadow: 0 8px 32px rgba(44,62,80,0.13);
+    border: 2px solid #e3f2fd;
     transition: box-shadow 0.2s;
 }
 
 h1 {
     text-align: center;
     color: #1976d2;
-    margin-bottom: 22px;
-    font-size: 2.2rem;
+    margin-bottom: 26px;
+    font-size: 2.5rem;
     letter-spacing: 1px;
+    font-weight: 800;
+    text-shadow: 0 2px 8px #e3f2fd;
 }
 
 .btn-cadastrar, .btn-salvar, #adicionar-variacao, #btn-refresh {
     display: inline-block;
-    padding: 12px 26px;
+    padding: 13px 28px;
     background: linear-gradient(90deg, #1976d2 60%, #4CAF50 100%);
     color: #fff;
-    border-radius: 7px;
+    border-radius: 8px;
     border: none;
-    font-size: 17px;
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 700;
     cursor: pointer;
-    margin-bottom: 18px;
-    margin-top: 8px;
-    box-shadow: 0 2px 8px rgba(25,118,210,0.08);
-    transition: background 0.2s, transform 0.2s;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    box-shadow: 0 2px 12px rgba(25,118,210,0.08);
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    outline: none;
+    position: relative;
+    overflow: hidden;
 }
 .btn-cadastrar:hover, .btn-salvar:hover, #adicionar-variacao:hover, #btn-refresh:hover {
     background: linear-gradient(90deg, #1565c0 60%, #388e3c 100%);
     transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 4px 24px rgba(25,118,210,0.12);
 }
 
 table {
@@ -50,23 +57,27 @@ table {
     border-spacing: 0;
     margin-top: 0;
     background: #fafbfc;
-    border-radius: 12px;
+    border-radius: 14px;
     overflow: hidden;
     box-shadow: 0 2px 12px rgba(44,62,80,0.06);
 }
 
 th, td {
-    padding: 16px 14px;
+    padding: 17px 15px;
     border-bottom: 1px solid #e0e0e0;
     text-align: left;
-    font-size: 16px;
+    font-size: 17px;
 }
 
 th {
     background: #e3f2fd;
     color: #1976d2;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0.5px;
+}
+
+tr:nth-child(even) {
+    background: #f4f8fb;
 }
 
 tr:last-child td {
@@ -74,32 +85,57 @@ tr:last-child td {
 }
 
 tr:hover {
-    background: #f1f8e9;
+    background: #e8f5e9;
     transition: background 0.2s;
 }
 
-.btn-deletar, .remover-variacao {
-    background: #e53935;
+.btn-deletar {
+    background: linear-gradient(90deg, #e53935 60%, #ff7043 100%);
     color: #fff;
     border: none;
-    border-radius: 5px;
-    padding: 8px 13px;
+    border-radius: 6px;
+    padding: 9px 15px;
     cursor: pointer;
     font-size: 15px;
-    font-weight: 500;
-    transition: background 0.2s;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.2s;
+    outline: none;
 }
-.btn-deletar:hover, .remover-variacao:hover {
-    background: #b71c1c;
+.btn-deletar:hover {
+    background: linear-gradient(90deg, #b71c1c 60%, #ff7043 100%);
+    transform: scale(1.05);
 }
+
+.btn-deletar-variacao {
+    background: transparent !important;
+    color: #e53935;
+    border: none;
+    border-radius: 50%;
+    padding: 6px 8px;
+    cursor: pointer;
+    font-size: 1.3rem;
+    font-weight: normal;
+    box-shadow: none;
+    transition: color 0.2s, transform 0.2s;
+    outline: none;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-deletar-variacao:hover {
+    color: #b71c1c;
+    background: rgba(229,57,53,0.08);
+    transform: scale(1.15);
+}   
 
 form {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 20px;
     background: #f8fafb;
-    border-radius: 10px;
-    padding: 24px 18px 18px 18px;
+    border-radius: 12px;
+    padding: 28px 20px 20px 20px;
     box-shadow: 0 2px 8px rgba(44,62,80,0.04);
     margin-bottom: 0;
 }
@@ -107,41 +143,42 @@ form {
 .campo {
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 8px;
 }
 
 label {
-    font-weight: 600;
+    font-weight: 700;
     color: #1976d2;
     margin-bottom: 2px;
 }
 
 input[type="text"],
 input[type="number"] {
-    padding: 10px;
-    border: 1.5px solid #cfd8dc;
-    border-radius: 6px;
-    font-size: 16px;
+    padding: 11px;
+    border: 1.7px solid #cfd8dc;
+    border-radius: 7px;
+    font-size: 17px;
     background: #f8fafb;
-    transition: border 0.2s;
+    transition: border 0.2s, box-shadow 0.2s;
 }
 input[type="text"]:focus,
 input[type="number"]:focus {
-    border: 1.5px solid #1976d2;
+    border: 1.7px solid #1976d2;
     outline: none;
     background: #fff;
+    box-shadow: 0 2px 8px #e3f2fd;
 }
 
 #variacoes-container {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 10px;
+    gap: 12px;
+    margin-bottom: 12px;
 }
 
 .variacao-row {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     align-items: center;
     margin-bottom: 4px;
 }
@@ -153,8 +190,8 @@ input[type="number"]:focus {
 }
 
 #adicionar-variacao {
-    margin-bottom: 8px;
-    margin-top: 4px;
+    margin-bottom: 10px;
+    margin-top: 5px;
     background: linear-gradient(90deg, #1976d2 60%, #00bcd4 100%);
 }
 #adicionar-variacao:hover {
@@ -163,16 +200,27 @@ input[type="number"]:focus {
 
 #mensagem-cadastro {
     text-align: center;
-    font-size: 1.1rem;
-    margin-bottom: 8px;
-    min-height: 24px;
+    font-size: 1.15rem;
+    margin-bottom: 10px;
+    min-height: 28px;
+    font-weight: 600;
+}
+#mensagem-cadastro:empty {
+    min-height: 0;
+}
+
+#mensagem-cadastro[style*="green"]::before {
+    content: "✅ ";
+}
+#mensagem-cadastro[style*="red"]::before {
+    content: "❌ ";
 }
 
 .botoes-voltar {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-top: 28px;
+    gap: 10px;
+    margin-top: 32px;
 }
 
 .voltar {
@@ -180,8 +228,8 @@ input[type="number"]:focus {
     text-align: center;
     color: #1976d2;
     text-decoration: none;
-    font-weight: 600;
-    font-size: 16px;
+    font-weight: 700;
+    font-size: 17px;
     transition: color 0.2s;
 }
 .voltar:hover {
@@ -193,7 +241,7 @@ input[type="number"]:focus {
 @media (max-width: 700px) {
     .container {
         max-width: 98vw;
-        padding: 12px 2vw;
+        padding: 14px 2vw;
     }
     table, thead, tbody, th, td, tr {
         display: block;
@@ -202,22 +250,22 @@ input[type="number"]:focus {
         display: none;
     }
     tr {
-        margin-bottom: 18px;
+        margin-bottom: 20px;
         background: #fff;
-        border-radius: 8px;
+        border-radius: 10px;
         box-shadow: 0 1px 4px rgba(44,62,80,0.04);
-        padding: 8px 0;
+        padding: 10px 0;
     }
     td {
-        padding: 10px 12px;
+        padding: 12px 14px;
         border: none;
         position: relative;
     }
     td:before {
         content: attr(data-label);
-        font-weight: 700;
+        font-weight: 800;
         color: #1976d2;
         display: block;
-        margin-bottom: 4px;
+        margin-bottom: 5px;
     }
 }
