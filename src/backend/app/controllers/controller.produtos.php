@@ -15,15 +15,21 @@ function createProduto() {
     header('Access-Control-Allow-Origin: *');
     $data = json_decode(file_get_contents('php://input'), true);
 
-    if (!isset($data['nome']) || !isset($data['preco'])) {
+    if (!isset($data['nome']) || !isset($data['preco']) || !isset($data['estoque'])) {
         http_response_code(400);
         echo json_encode(['error' => 'Dados inválidos']);
         exit;
     }
 
+    $nome = $data['nome'];
+    $preco = $data['preco'];
+    $estoque = $data['estoque'];
+    $cor = $data['cor'] ?? null;
+    $modelo = $data['modelo'] ?? null;
+    $marca = $data['marca'] ?? null;
     $variacoes = $data['variacoes'] ?? [];
 
-    $id = insertProdutoComVariacoes($data['nome'], $data['preco'], $variacoes);
+    $id = insertProdutoComVariacoes($nome, $preco, $estoque, $cor, $modelo, $marca, $variacoes);
     if ($id) {
         echo json_encode(['success' => true, 'id' => $id]);
     } else {

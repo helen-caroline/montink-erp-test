@@ -60,32 +60,34 @@ document.getElementById('adicionar-variacao').addEventListener('click', function
     const row = document.createElement('div');
     row.className = 'variacao-row';
     row.innerHTML = `
-        <input type="text" class="variacao-nome" placeholder="Nome da variação (ex: Cor)">
-        <input type="text" class="variacao-valor" placeholder="Valor (ex: Azul)">
-        <input type="number" class="variacao-estoque" placeholder="Estoque" min="0">
+        <input type="text" class="variacao-nome" placeholder="Nome da variação (ex: Personalizado)">
+        <input type="text" class="variacao-valor" placeholder="Valor (ex: Nome do cliente)">
         <button type="button" class="remover-variacao">Remover</button>
     `;
     row.querySelector('.remover-variacao').onclick = () => row.remove();
     container.appendChild(row);
 });
 
+// Evento de submit do formulário de cadastro de produto
 document.getElementById('form-cadastrar-produto').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const nome = document.getElementById('nome').value;
     const preco = document.getElementById('preco').value;
+    const estoque = document.getElementById('estoque').value;
+    const cor = document.getElementById('cor').value;
+    const modelo = document.getElementById('modelo').value;
+    const marca = document.getElementById('marca').value;
 
-    // Coletar variações
+    // Coletar variações personalizadas
     const variacoes = [];
     document.querySelectorAll('.variacao-row').forEach(row => {
         const nomeVar = row.querySelector('.variacao-nome').value;
         const valorVar = row.querySelector('.variacao-valor').value;
-        const estoqueVar = row.querySelector('.variacao-estoque').value;
-        if (nomeVar && valorVar && estoqueVar !== '') {
+        if (nomeVar && valorVar) {
             variacoes.push({
                 nome: nomeVar,
-                valor: valorVar,
-                estoque: parseInt(estoqueVar)
+                valor: valorVar
             });
         }
     });
@@ -95,7 +97,7 @@ document.getElementById('form-cadastrar-produto').addEventListener('submit', asy
     const response = await fetch('http://localhost:8000/produtos/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nome, preco, variacoes })
+        body: JSON.stringify({ nome, preco, estoque, cor, modelo, marca, variacoes })
     });
 
     if (response.ok) {

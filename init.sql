@@ -2,7 +2,10 @@ CREATE TABLE produtos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255),
     preco DECIMAL(10,2),
-    estoque INT
+    estoque INT,
+    cor VARCHAR(100),
+    modelo VARCHAR(100),
+    marca VARCHAR(100)
 );
 
 CREATE TABLE variacoes (
@@ -11,15 +14,6 @@ CREATE TABLE variacoes (
     nome VARCHAR(255),
     valor VARCHAR(255),
     FOREIGN KEY (produto_id) REFERENCES produtos(id)
-);
-
-CREATE TABLE estoque (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    produto_id INT,
-    variacao_id INT,
-    quantidade INT,
-    FOREIGN KEY (produto_id) REFERENCES produtos(id),
-    FOREIGN KEY (variacao_id) REFERENCES variacoes(id)
 );
 
 CREATE TABLE cupons (

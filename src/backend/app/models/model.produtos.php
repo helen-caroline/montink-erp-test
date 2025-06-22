@@ -15,12 +15,8 @@ function getAllProdutos() {
         $stmt = $pdo->query('SELECT * FROM produtos');
         $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Buscar variações para cada produto
         foreach ($produtos as &$produto) {
-            $stmtVar = $pdo->prepare('SELECT v.id, v.nome, v.valor, e.quantidade 
-                                      FROM variacoes v 
-                                      LEFT JOIN estoque e ON v.id = e.variacao_id
-                                      WHERE v.produto_id = ?');
+            $stmtVar = $pdo->prepare('SELECT v.id, v.nome, v.valor FROM variacoes v WHERE v.produto_id = ?');
             $stmtVar->execute([$produto['id']]);
             $produto['variacoes'] = $stmtVar->fetchAll(PDO::FETCH_ASSOC);
         }
@@ -48,34 +44,21 @@ function insertProduto($nome, $preco, $estoque) {
     }
 }
 
-function insertProdutoComVariacoes($nome, $preco, $variacoes) {
+function insertProdutoComVariacoes($nome, $preco, $estoque, $cor, $modelo, $marca, $variacoes) {
     global $user, $pass, $dsn;
     try {
         $pdo = new PDO($dsn, $user, $pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Cria produto
-        $stmt = $pdo->prepare('INSERT INTO produtos (nome, preco, estoque) VALUES (?, ?, 0)');
-        $stmt->execute([$nome, $preco]);
+        // Cria produto com todos os campos
+        $stmt = $pdo->prepare('INSERT INTO produtos (nome, preco, estoque, cor, modelo, marca) VALUES (?, ?, ?, ?, ?, ?)');
+        $stmt->execute([$nome, $preco, $estoque, $cor, $modelo, $marca]);
         $produto_id = $pdo->lastInsertId();
 
-        $estoque_total = 0;
-
         foreach ($variacoes as $var) {
-            // Cria variação
             $stmtVar = $pdo->prepare('INSERT INTO variacoes (produto_id, nome, valor) VALUES (?, ?, ?)');
             $stmtVar->execute([$produto_id, $var['nome'], $var['valor']]);
-            $variacao_id = $pdo->lastInsertId();
-
-            // Cria estoque da variação
-            $stmtEst = $pdo->prepare('INSERT INTO estoque (produto_id, variacao_id, quantidade) VALUES (?, ?, ?)');
-            $stmtEst->execute([$produto_id, $variacao_id, $var['estoque']]);
-            $estoque_total += $var['estoque'];
         }
-
-        // Atualiza estoque total do produto
-        $stmt = $pdo->prepare('UPDATE produtos SET estoque = ? WHERE id = ?');
-        $stmt->execute([$estoque_total, $produto_id]);
 
         return $produto_id;
     } catch (PDOException $e) {
