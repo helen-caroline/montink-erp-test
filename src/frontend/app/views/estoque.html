@@ -8,12 +8,13 @@
 </head>
 <body>
     <div class="container">
-        <div class="produtos-submenu">
-            <button id="aba-lista" class="active" type="button">Lista de Produtos</button>
-            <button id="aba-cadastro" type="button">Cadastrar Produto</button>
+        <h1>Produtos</h1>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="lista">Lista de Produtos</button>
+            <button class="tab-btn" data-tab="cadastro">Cadastrar Produto</button>
         </div>
-        <div id="conteudo-lista">
-            <h1>Lista de Produtos</h1>
+        <div id="tab-lista" class="tab-content active">
+            <!-- Conteúdo da lista de produtos -->
             <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
                 <button id="btn-excluir-selecionados" class="btn-deletar" style="margin-bottom:0;">Excluir Selecionados</button>
             </div>
@@ -36,8 +37,8 @@
                 </tbody>
             </table>
         </div>
-        <div id="conteudo-cadastro" style="display:none;">
-            <h1>Cadastrar Produto</h1>
+        <div id="tab-cadastro" class="tab-content">
+            <h3>Cadastrar Produto</h3>
             <div id="mensagem-cadastro"></div>
             <form id="form-cadastrar-produto">
                 <div class="campo">
@@ -80,6 +81,6 @@
         </div>
     </div>
     <script src="../js/estoque.js"></script>
-    <script src="../js/estoque-sub-menu/cadastro-produto.js"></script>
+    <script src="../js/estoque-sub-menu/abas.js"></script>
 </body>
 </html>

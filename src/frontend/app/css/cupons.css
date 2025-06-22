@@ -1,27 +1,216 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 30px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(120deg, #232e43 0%, #26334d 100%);
+    margin: 0;
+    min-height: 100vh;
 }
+
+.container {
+    max-width: 900px;
+    margin: 54px auto;
+    background: #232e43;
+    padding: 40px 32px 36px 32px;
+    border-radius: 22px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+}
+
+h1 {
+    color: #4fc3f7;
+    text-align: center;
+    margin-bottom: 32px;
+    letter-spacing: 2px;
+}
+
+h2, h3 {
+    color: #fff;
+    margin-bottom: 18px;
+}
+
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.tab-btn {
+    padding: 12px 28px;
+    border: none;
+    background: #26334d;
+    color: #4fc3f7;
+    cursor: pointer;
+    margin-right: 5px;
+    border-radius: 12px 12px 0 0;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: background 0.2s, color 0.2s;
+    outline: none;
+}
+
+.tab-btn.active {
+    background: #181f2a;
+    color: #fff;
+    border-bottom: 2px solid #4fc3f7;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.5s;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 form {
     margin-bottom: 20px;
+    background: #26334d;
+    padding: 24px 18px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(31, 38, 135, 0.10);
 }
-input, select, button {
-    margin: 5px;
-    padding: 5px;
+
+.campo {
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
 }
+
+.campo label {
+    width: 160px;
+    color: #4fc3f7;
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #4fc3f7;
+    border-radius: 6px;
+    background: #181f2a;
+    color: #fff;
+    font-size: 1rem;
+    margin-left: 10px;
+    transition: border 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus {
+    border: 1.5px solid #fff;
+    outline: none;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+input[type="date"]::-webkit-input-placeholder { color: #fff; }
+input[type="date"]::-moz-placeholder { color: #fff; }
+input[type="date"]:-ms-input-placeholder { color: #fff; }
+input[type="date"]::placeholder { color: #fff; }
+
+input[type="checkbox"] {
+    accent-color: #4fc3f7;
+    margin-left: 0;
+}
+
+.btn-salvar, .btn-deletar {
+    background: linear-gradient(90deg, #4fc3f7 0%, #1976d2 100%);
+    color: #fff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    margin-top: 10px;
+    margin-right: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(31, 38, 135, 0.10);
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn-salvar:hover, .btn-deletar:hover {
+    background: linear-gradient(90deg, #1976d2 0%, #4fc3f7 100%);
+    transform: translateY(-2px) scale(1.03);
+}
+
+.btn-deletar {
+    background: linear-gradient(90deg, #f44336 0%, #ff9800 100%);
+}
+
+.btn-deletar:hover {
+    background: linear-gradient(90deg, #ff9800 0%, #f44336 100%);
+}
+
 table {
     border-collapse: collapse;
     width: 100%;
     margin-bottom: 30px;
+    background: #181f2a;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(31, 38, 135, 0.10);
 }
+
 th, td {
-    border: 1px solid #ccc;
-    padding: 8px;
+    border: 1px solid #26334d;
+    padding: 12px 8px;
     text-align: center;
+    color: #fff;
+    font-size: 1rem;
 }
+
 th {
-    background: #f5f5f5;
+    background: #26334d;
+    color: #4fc3f7;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
-button {
-    cursor: pointer;
+
+tr:nth-child(even) {
+    background: #232e43;
+}
+
+#mensagem-cadastro, #mensagem-vinculo {
+    margin-left: 18px;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+@media (max-width: 700px) {
+    .container {
+        padding: 10px 2vw;
+    }
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    th, td {
+        padding: 10px 4px;
+    }
+    .campo label {
+        width: 110px;
+    }
+}
+
+.form-vincular .vincular-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+}
+.form-vincular select {
+    min-width: 180px;
+}
+.form-vincular .btn-salvar {
+    margin-top: 0;
+    margin-right: 0;
 }

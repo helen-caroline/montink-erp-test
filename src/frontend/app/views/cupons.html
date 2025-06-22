@@ -3,30 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Cupons</title>
-    <link rel="stylesheet" href="../css/estoque.css">
-    <style>
-        .tabs { display: flex; margin-bottom: 20px; }
-        .tab-btn {
-            padding: 10px 20px;
-            border: 1px solid #26334d;
-            background: #232e43;
-            color: #4fc3f7;
-            cursor: pointer;
-            margin-right: 5px;
-            border-radius: 8px 8px 0 0;
-            font-weight: 700;
-        }
-        .tab-btn.active {
-            background: #181f2a;
-            border-bottom: 2px solid #181f2a;
-            color: #fff;
-        }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .container { max-width: 900px; margin: 54px auto; background: #232e43; padding: 40px 32px 36px 32px; border-radius: 22px; }
-        h1 { color: #4fc3f7; text-align: center; }
-        table { margin-top: 20px; }
-    </style>
+    <link rel="stylesheet" href="../css/cupons.css">
 </head>
 <body>
     <div class="container">
@@ -37,7 +14,20 @@
         </div>
 
         <div id="tab-visualizar" class="tab-content active">
-            <h2>Cupons cadastrados</h2>
+            <h3>Vincular Cupom a Produto</h3>
+            <form id="form-vincular-cupom-produto" class="form-vincular">
+                <div class="vincular-row">
+                    <select id="select-cupom" required>
+                        <option value="">Selecione um cupom</option>
+                    </select>
+                    <select id="select-produto" required>
+                        <option value="">Selecione um produto</option>
+                    </select>
+                    <button type="submit" class="btn-salvar">Vincular</button>
+                </div>
+                <span id="mensagem-vinculo"></span>
+            </form>
+            <h3>Cupons cadastrados</h3>
             <table>
                 <thead>
                     <tr>
@@ -53,21 +43,10 @@
                     <!-- Linhas de cupons serão inseridas aqui -->
                 </tbody>
             </table>
-            <h3>Vincular Cupom a Produto</h3>
-            <form id="form-vincular-cupom-produto">
-                <select id="select-cupom" required>
-                    <option value="">Selecione um cupom</option>
-                </select>
-                <select id="select-produto" required>
-                    <option value="">Selecione um produto</option>
-                </select>
-                <button type="submit" class="btn-salvar">Vincular</button>
-                <span id="mensagem-vinculo"></span>
-            </form>
         </div>
 
         <div id="tab-cadastrar" class="tab-content">
-            <h2>Cadastrar novo cupom</h2>
+            <h3>Cadastrar novo cupom</h3>
             <form id="form-cadastrar-cupom">
                 <div class="campo">
                     <label for="codigo">Código do cupom</label>
@@ -79,7 +58,10 @@
                 </div>
                 <div class="campo">
                     <label for="validade">Validade</label>
-                    <input type="date" id="validade" required>
+                    <input type="date" id="validade">
+                    <label style="margin-left:15px;">
+                        <input type="checkbox" id="vitalicio"> Vitalício
+                    </label>
                 </div>
                 <div class="campo">
                     <label for="valor_minimo">Valor mínimo (R$)</label>

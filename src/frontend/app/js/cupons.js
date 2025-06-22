@@ -6,12 +6,13 @@ async function carregarCupons() {
 
     if (data.cupons && data.cupons.length > 0) {
         data.cupons.forEach(cupom => {
+            const validadeStr = cupom.validade ? cupom.validade : '<span style="color:#4fc3f7;font-weight:bold;">Vitalício</span>';
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${cupom.id}</td>
                 <td>${cupom.codigo}</td>
                 <td>R$ ${parseFloat(cupom.desconto).toFixed(2)}</td>
-                <td>${cupom.validade}</td>
+                <td>${validadeStr}</td>
                 <td>R$ ${parseFloat(cupom.valor_minimo).toFixed(2)}</td>
                 <td>
                     <button class="btn-deletar" data-id="${cupom.id}">Deletar</button>
@@ -49,8 +50,11 @@ if (formCadastrarCupom) {
         e.preventDefault();
         const codigo = document.getElementById('codigo').value;
         const desconto = document.getElementById('desconto').value;
-        const validade = document.getElementById('validade').value;
         const valor_minimo = document.getElementById('valor_minimo').value;
+        const vitalicio = document.getElementById('vitalicio').checked;
+        let validade = document.getElementById('validade').value;
+        if (vitalicio) validade = null;
+
         const mensagemDiv = document.getElementById('mensagem-cadastro');
 
         const resp = await fetch('http://localhost:8000/cupons/create', {
@@ -69,6 +73,16 @@ if (formCadastrarCupom) {
             mensagemDiv.style.color = 'red';
         }
     });
+
+    // Desabilita o campo de data se vitalício estiver marcado
+    const vitalicioCheckbox = document.getElementById('vitalicio');
+    const validadeInput = document.getElementById('validade');
+    if (vitalicioCheckbox && validadeInput) {
+        vitalicioCheckbox.addEventListener('change', function() {
+            validadeInput.disabled = this.checked;
+            if (this.checked) validadeInput.value = '';
+        });
+    }
 }
 
 // Carregar cupons no select para vincular
