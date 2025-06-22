@@ -11,8 +11,10 @@ async function carregarProdutos() {
             let variacoesStr = '-';
             if (produto.variacoes && produto.variacoes.length > 0) {
                 variacoesStr = produto.variacoes.map(v => `
-                    ${v.nome}: ${v.valor}
-                    <button class="btn-deletar-variacao" data-id="${v.id}" title="Deletar variação">🗑️</button>
+                    <span class="variacao-list-item">
+                        <span class="variacao-nome-valor">${v.nome}: ${v.valor}</span>
+                        <button class="btn-deletar-variacao" data-id="${v.id}" title="Deletar variação">🗑️</button>
+                    </span>
                 `).join('<br>');
             }
     

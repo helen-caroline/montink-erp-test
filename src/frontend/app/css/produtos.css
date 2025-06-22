@@ -111,7 +111,27 @@ td {
     transform: scale(1.05);
 }
 
+/* ----------- Variações na Tabela ----------- */
+td:nth-child(5) {
+    vertical-align: middle;
+    /* Garante alinhamento vertical das variações */
+}
+.variacao-list-item {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espaço entre o texto e o botão 🗑️ */
+    min-height: 36px; /* Altura mínima para alinhar todos os botões */
+    padding-right: 8px; /* Pequeno recuo à direita para não colar na borda */
+}
+.variacao-nome-valor {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: left;
+    word-break: break-word;
+}
 .btn-deletar-variacao {
+    min-width: 36px;
+    justify-content: center;
     background: transparent !important;
     color: #e53935;
     border: none;
@@ -126,7 +146,6 @@ td {
     line-height: 1;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
 }
 .btn-deletar-variacao:hover {
     color: #b71c1c;
@@ -134,6 +153,25 @@ td {
     transform: scale(1.15);
 }
 
+/* ----------- Variações no Formulário ----------- */
+#variacoes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+.variacao-row {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Mesmo gap das variações da tabela */
+    min-height: 36px;
+    margin-bottom: 4px;
+}
+.variacao-row input[type="text"],
+.variacao-row input[type="number"] {
+    flex: 1 1 0;
+    min-width: 0;
+}
 button.remover-variacao {
     background: linear-gradient(90deg, #e53935 60%, #ff7043 100%);
     color: #fff;
@@ -155,6 +193,7 @@ button.remover-variacao:hover {
     transform: scale(1.05);
 }
 
+/* ----------- Formulário ----------- */
 form {
     display: flex;
     flex-direction: column;
@@ -194,26 +233,6 @@ input[type="number"]:focus {
     outline: none;
     background: #181f2a;
     box-shadow: 0 2px 8px #26334d;
-}
-
-#variacoes-container {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 12px;
-}
-
-.variacao-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    margin-bottom: 4px;
-}
-
-.variacao-row input[type="text"],
-.variacao-row input[type="number"] {
-    flex: 1 1 0;
-    min-width: 0;
 }
 
 #adicionar-variacao {
@@ -264,7 +283,7 @@ input[type="number"]:focus {
     text-decoration: underline;
 }
 
-/* Responsividade */
+/* ----------- Responsividade ----------- */
 @media (max-width: 700px) {
     .container {
         max-width: 98vw;
