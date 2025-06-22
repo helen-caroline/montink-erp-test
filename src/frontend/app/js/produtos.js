@@ -3,6 +3,8 @@ async function carregarProdutos() {
     const data = await response.json();
 
     const tbody = document.getElementById('produtos-tbody');
+    if (!tbody) return;
+
     tbody.innerHTML = '';
 
     if (data.produtos && data.produtos.length > 0) {
@@ -75,63 +77,71 @@ async function carregarProdutos() {
     }
 }
 
-document.getElementById('btn-refresh').addEventListener('click', carregarProdutos);
-
 // Adicionar/remover variações dinamicamente
-document.getElementById('adicionar-variacao').addEventListener('click', function() {
-    const container = document.getElementById('variacoes-container');
-    const row = document.createElement('div');
-    row.className = 'variacao-row';
-    row.innerHTML = `
-        <input type="text" class="variacao-nome" placeholder="Nome da variação (ex: Personalizado)">
-        <input type="text" class="variacao-valor" placeholder="Valor (ex: Nome do cliente)">
-        <button type="button" class="remover-variacao">Remover</button>
-    `;
-    row.querySelector('.remover-variacao').onclick = () => row.remove();
-    container.appendChild(row);
-});
+const btnAdicionarVariacao = document.getElementById('adicionar-variacao');
+if (btnAdicionarVariacao) {
+    btnAdicionarVariacao.addEventListener('click', function() {
+        const container = document.getElementById('variacoes-container');
+        if (!container) return;
+        const row = document.createElement('div');
+        row.className = 'variacao-row';
+        row.innerHTML = `
+            <input type="text" class="variacao-nome" placeholder="Nome da variação (ex: Personalizado)">
+            <input type="text" class="variacao-valor" placeholder="Valor (ex: Nome do cliente)">
+            <button type="button" class="remover-variacao">Remover</button>
+        `;
+        row.querySelector('.remover-variacao').onclick = () => row.remove();
+        container.appendChild(row);
+    });
+}
 
 // Evento de submit do formulário de cadastro de produto
-document.getElementById('form-cadastrar-produto').addEventListener('submit', async function(e) {
-    e.preventDefault();
+const formCadastrarProduto = document.getElementById('form-cadastrar-produto');
+if (formCadastrarProduto) {
+    formCadastrarProduto.addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-    const nome = document.getElementById('nome').value;
-    const preco = document.getElementById('preco').value;
-    const estoque = document.getElementById('estoque').value;
-    const cor = document.getElementById('cor').value;
-    const modelo = document.getElementById('modelo').value;
-    const marca = document.getElementById('marca').value;
+        const nome = document.getElementById('nome').value;
+        const preco = document.getElementById('preco').value;
+        const estoque = document.getElementById('estoque').value;
+        const cor = document.getElementById('cor').value;
+        const modelo = document.getElementById('modelo').value;
+        const marca = document.getElementById('marca').value;
 
-    // Coletar variações personalizadas
-    const variacoes = [];
-    document.querySelectorAll('.variacao-row').forEach(row => {
-        const nomeVar = row.querySelector('.variacao-nome').value;
-        const valorVar = row.querySelector('.variacao-valor').value;
-        if (nomeVar && valorVar) {
-            variacoes.push({
-                nome: nomeVar,
-                valor: valorVar
-            });
+        // Coletar variações personalizadas
+        const variacoes = [];
+        document.querySelectorAll('.variacao-row').forEach(row => {
+            const nomeVar = row.querySelector('.variacao-nome').value;
+            const valorVar = row.querySelector('.variacao-valor').value;
+            if (nomeVar && valorVar) {
+                variacoes.push({
+                    nome: nomeVar,
+                    valor: valorVar
+                });
+            }
+        });
+
+        const mensagemDiv = document.getElementById('mensagem-cadastro');
+
+        const response = await fetch('http://localhost:8000/produtos/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nome, preco, estoque, cor, modelo, marca, variacoes })
+        });
+
+        if (response.ok) {
+            mensagemDiv.textContent = 'Produto cadastrado com sucesso!';
+            mensagemDiv.style.color = 'green';
+            formCadastrarProduto.reset();
+            carregarProdutos();
+        } else {
+            mensagemDiv.textContent = 'Erro ao cadastrar produto.';
+            mensagemDiv.style.color = 'red';
         }
     });
+}
 
-    const mensagemDiv = document.getElementById('mensagem-cadastro');
-
-    const response = await fetch('http://localhost:8000/produtos/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nome, preco, estoque, cor, modelo, marca, variacoes })
-    });
-
-    if (response.ok) {
-        mensagemDiv.textContent = 'Produto cadastrado com sucesso!';
-        mensagemDiv.style.color = 'green';
-        document.getElementById('form-cadastrar-produto').reset();
-        carregarProdutos();
-    } else {
-        mensagemDiv.textContent = 'Erro ao cadastrar produto.';
-        mensagemDiv.style.color = 'red';
-    }
-});
-
-carregarProdutos();
+// Só chama carregarProdutos se a tabela existir na página
+if (document.getElementById('produtos-tbody')) {
+    carregarProdutos();
+}
