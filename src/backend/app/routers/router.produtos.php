@@ -14,5 +14,9 @@ function handleProdutosRoutes($uri, $method) {
         viewProdutos();
         return;
     }
-    // Adicione outras rotas de produtos aqui
+    
+    if ($uri === '/produtos/create' && $method === 'POST') {
+        createProduto();
+        return;
+    }
 }

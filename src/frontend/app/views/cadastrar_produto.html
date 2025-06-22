@@ -8,6 +8,7 @@
 <body>
     <div class="container">
         <h1>Cadastrar Produto</h1>
+        <div id="mensagem-cadastro"></div>
         <form>
             <div class="campo">
                 <label for="nome">Nome do Produto</label>
@@ -18,8 +19,8 @@
                 <input type="number" id="preco" name="preco" step="0.01" min="0" placeholder="0,00" required>
             </div>
             <div class="campo">
-                <label for="estoque">Estoque</label>
-                <input type="number" id="estoque" name="estoque" min="0" placeholder="Quantidade em estoque" required>
+                <label for="estoque">Estoque:</label>
+                <input type="number" id="estoque" name="estoque" required>
             </div>
             <button type="submit" class="btn-salvar">Cadastrar</button>
         </form>
@@ -28,5 +29,6 @@
             <a class="voltar" href="../../public/index.html">🏠 Voltar para o início</a>
         </div>
     </div>
+    <script src="../js/cadastrar_produto.js"></script>
 </body>
 </html>
