@@ -2,6 +2,7 @@
 // app.php
 
 require_once __DIR__ . '/routers/router.produtos.php';
+require_once __DIR__ . '/routers/router.cupons.php';
 
 function handleRequest() {
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -13,6 +14,13 @@ function handleRequest() {
         return;
     }
 
+    // Rotas de cupons
+    if (strpos($uri, '/cupons') === 0) {
+        handleCuponsRoutes($uri, $method);
+        return;
+    }
+
+    // helfth check
     if ($uri === '/hello' && $method === 'GET') {
         header('Content-Type: application/json');
         echo json_encode(['message' => 'Hello World']);
