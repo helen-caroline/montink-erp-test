@@ -19,40 +19,57 @@ async function carregarProdutos() {
                     </span>
                 `).join('<br>');
             }
-    
+
             const tr = document.createElement('tr');
             tr.innerHTML = `
+                <td>
+                    <input type="checkbox" class="selecionar-produto" data-id="${produto.id}">
+                </td>
                 <td>${produto.id}</td>
                 <td>${produto.nome}</td>
                 <td>R$ ${parseFloat(produto.preco).toFixed(2)}</td>
                 <td>${produto.estoque}</td>
                 <td>${variacoesStr}</td>
-                <td>
-                    <button class="btn-deletar" data-id="${produto.id}">Deletar</button>
-                </td>
+                <td></td>
             `;
             tbody.appendChild(tr);
         });
-    
-        // Adiciona evento aos botões de deletar produto
-        document.querySelectorAll('.btn-deletar').forEach(btn => {
-            btn.addEventListener('click', async function() {
-                const id = this.getAttribute('data-id');
-                if (confirm('Tem certeza que deseja deletar este produto?')) {
-                    const resp = await fetch('http://localhost:8000/produtos/delete', {
-                        method: 'DELETE',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ id })
-                    });
-                    if (resp.ok) {
-                        carregarProdutos();
+
+        // Seleção de todos
+        const selecionarTodos = document.getElementById('selecionar-todos');
+        if (selecionarTodos) {
+            selecionarTodos.checked = false;
+            selecionarTodos.onclick = function() {
+                document.querySelectorAll('.selecionar-produto').forEach(cb => {
+                    cb.checked = selecionarTodos.checked;
+                    const tr = cb.closest('tr');
+                    if (cb.checked) {
+                        tr.classList.add('selected');
                     } else {
-                        alert('Erro ao deletar produto.');
+                        tr.classList.remove('selected');
                     }
+                });
+            };
+        }
+
+        // Atualiza o checkbox do topo se todos forem marcados/desmarcados individualmente
+        document.querySelectorAll('.selecionar-produto').forEach(cb => {
+            cb.addEventListener('change', function() {
+                const all = document.querySelectorAll('.selecionar-produto');
+                const checked = document.querySelectorAll('.selecionar-produto:checked');
+                if (selecionarTodos) {
+                    selecionarTodos.checked = all.length === checked.length;
+                }
+                // Realce visual da linha selecionada
+                const tr = this.closest('tr');
+                if (this.checked) {
+                    tr.classList.add('selected');
+                } else {
+                    tr.classList.remove('selected');
                 }
             });
         });
-    
+
         // Adiciona evento aos botões de deletar variação
         document.querySelectorAll('.btn-deletar-variacao').forEach(btn => {
             btn.addEventListener('click', async function(e) {
@@ -73,8 +90,31 @@ async function carregarProdutos() {
             });
         });
     } else {
-        tbody.innerHTML = '<tr><td colspan="6">Nenhum produto encontrado.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7">Nenhum produto encontrado.</td></tr>';
     }
+}
+
+// Após carregarProdutos() e fora da função carregarProdutos
+const btnExcluirSelecionados = document.getElementById('btn-excluir-selecionados');
+if (btnExcluirSelecionados) {
+    btnExcluirSelecionados.addEventListener('click', async function() {
+        const selecionados = Array.from(document.querySelectorAll('.selecionar-produto:checked'));
+        if (selecionados.length === 0) {
+            alert('Selecione pelo menos um produto para excluir.');
+            return;
+        }
+        if (!confirm(`Deseja realmente excluir ${selecionados.length} produto(s)?`)) return;
+
+        for (const cb of selecionados) {
+            const id = cb.getAttribute('data-id');
+            await fetch('http://localhost:8000/produtos/delete', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+        }
+        carregarProdutos();
+    });
 }
 
 // Adicionar/remover variações dinamicamente

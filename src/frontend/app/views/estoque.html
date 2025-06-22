@@ -14,9 +14,15 @@
         </div>
         <div id="conteudo-lista">
             <h1>Lista de Produtos</h1>
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+                <button id="btn-excluir-selecionados" class="btn-deletar" style="margin-bottom:0;">Excluir Selecionados</button>
+            </div>
             <table>
                 <thead>
                     <tr>
+                        <th>
+                            <input type="checkbox" id="selecionar-todos" title="Selecionar todos">
+                        </th>
                         <th>ID</th>
                         <th>Nome</th>
                         <th>Preço</th>

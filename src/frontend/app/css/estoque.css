@@ -315,3 +315,31 @@ input[type="number"]:focus {
         margin-bottom: 5px;
     }
 }
+
+input[type="checkbox"] {
+    accent-color: #4fc3f7;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin: 0 6px 0 0;
+    vertical-align: middle;
+    transition: box-shadow 0.2s;
+}
+input[type="checkbox"]:focus {
+    outline: 2px solid #1976d2;
+    box-shadow: 0 0 0 2px #1976d233;
+}
+
+/* Realce da linha selecionada */
+tr.selected, tr.selected:hover {
+    background: #26334d !important;
+    box-shadow: 0 0 8px #4fc3f755;
+}
+
+/* Ajuste para a nova coluna de seleção */
+th:first-child, td:first-child {
+    width: 44px;
+    text-align: center;
+    padding-left: 8px;
+    padding-right: 8px;
+}
