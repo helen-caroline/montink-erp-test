@@ -6,7 +6,7 @@ function handleProdutosRoutes($uri, $method) {
     // Suporte a CORS para preflight (OPTIONS)
     if ($method === 'OPTIONS') {
         header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+        header('Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS');
         header('Access-Control-Allow-Headers: Content-Type');
         http_response_code(204);
         exit;
@@ -29,7 +29,7 @@ function handleProdutosRoutes($uri, $method) {
         return;
     }
 
-    if ($uri === '/produtos/delete' && ($method === 'POST' || $method === 'DELETE')) {
+    if ($uri === '/produtos/delete' && ($method === 'DELETE' || $method === 'POST')) {
         deleteProduto();
         return;
     }

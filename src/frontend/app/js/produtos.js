@@ -14,7 +14,7 @@ async function carregarProdutos() {
                     `${v.nome}: ${v.valor} (Estoque: ${v.quantidade})`
                 ).join('<br>');
             }
-
+    
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${produto.id}</td>
@@ -22,11 +22,33 @@ async function carregarProdutos() {
                 <td>R$ ${parseFloat(produto.preco).toFixed(2)}</td>
                 <td>${produto.estoque ?? '-'}</td>
                 <td>${variacoesStr}</td>
+                <td>
+                    <button class="btn-deletar" data-id="${produto.id}" style="background:#e53935;color:#fff;border:none;border-radius:4px;padding:7px 10px;cursor:pointer;">Deletar</button>
+                </td>
             `;
             tbody.appendChild(tr);
         });
+    
+        // Adiciona evento aos botões de deletar
+        document.querySelectorAll('.btn-deletar').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const id = this.getAttribute('data-id');
+                if (confirm('Tem certeza que deseja deletar este produto?')) {
+                    const resp = await fetch('http://localhost:8000/produtos/delete', {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id })
+                    });
+                    if (resp.ok) {
+                        carregarProdutos();
+                    } else {
+                        alert('Erro ao deletar produto.');
+                    }
+                }
+            });
+        });
     } else {
-        tbody.innerHTML = '<tr><td colspan="5">Nenhum produto encontrado.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6">Nenhum produto encontrado.</td></tr>';
     }
 }
 
