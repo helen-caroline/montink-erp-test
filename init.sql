@@ -8,6 +8,8 @@ CREATE TABLE produtos (
     marca VARCHAR(100)
 );
 
+
+
 CREATE TABLE variacoes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     produto_id INT,
@@ -46,4 +48,12 @@ CREATE TABLE pedido_itens (
     FOREIGN KEY (pedido_id) REFERENCES pedidos(id),
     FOREIGN KEY (produto_id) REFERENCES produtos(id),
     FOREIGN KEY (variacao_id) REFERENCES variacoes(id)
+);
+
+CREATE TABLE produto_cupons (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    produto_id INT,
+    cupom_id INT,
+    FOREIGN KEY (produto_id) REFERENCES produtos(id),
+    FOREIGN KEY (cupom_id) REFERENCES cupons(id)
 );

@@ -216,3 +216,24 @@ tr:nth-child(even) {
     margin-top: 0;
     margin-right: 0;
 }
+
+/* Badge para cupons vinculados */
+.cupom-list-item {
+    display: inline-block;
+    background: #26334d;
+    color: #4fc3f7;
+    border-radius: 16px;
+    padding: 3px 12px;
+    margin: 2px 2px 2px 0;
+    font-size: 0.97em;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border: 1px solid #4fc3f7;
+    transition: background 0.2s, color 0.2s;
+}
+
+.cupom-list-item:hover {
+    background: #4fc3f7;
+    color: #181f2a;
+    cursor: pointer;
+}

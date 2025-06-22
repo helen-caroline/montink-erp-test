@@ -19,7 +19,17 @@ async function carregarProdutos() {
                     </span>
                 `).join('<br>');
             }
-
+    
+            // Monta string dos cupons vinculados
+            let cuponsStr = '-';
+            if (produto.cupons && produto.cupons.length > 0) {
+                cuponsStr = produto.cupons.map(c => 
+                    `<span class="cupom-list-item" title="Desconto: R$ ${parseFloat(c.desconto).toFixed(2)}">
+                        [${c.id}] ${c.codigo}
+                    </span>`
+                ).join(', ');
+            }
+    
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>
@@ -30,7 +40,7 @@ async function carregarProdutos() {
                 <td>R$ ${parseFloat(produto.preco).toFixed(2)}</td>
                 <td>${produto.estoque}</td>
                 <td>${variacoesStr}</td>
-                <td></td>
+                <td>${cuponsStr}</td>
             `;
             tbody.appendChild(tr);
         });

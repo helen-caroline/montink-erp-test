@@ -14,11 +14,18 @@ function handleCuponsRoutes($uri, $method) {
     
     if ($uri === '/cupons/view' && $method === 'GET') {
         viewCupons();
+        exit;
     }
-    if ($uri === '/cupons/delete' && $method === 'POST' || $method === 'DELETE') {
+    if ($uri === '/cupons/delete' && ($method === 'POST' || $method === 'DELETE')) {
         deleteCupons();
+        exit;
     }
     if ($uri === '/cupons/create' && $method === 'POST') {
         createCupons();
+        exit;
+    }
+    if ($uri === '/cupons/vincular' && $method === 'POST') {
+        vincularCupomProduto();
+        exit;
     }
 }

@@ -11,12 +11,27 @@ function getAllProdutos() {
             $stmtVar = $conn->prepare('SELECT v.id, v.nome, v.valor FROM variacoes v WHERE v.produto_id = ?');
             $stmtVar->execute([$produto['id']]);
             $produto['variacoes'] = $stmtVar->fetchAll(PDO::FETCH_ASSOC);
+        
+            // Buscar cupons vinculados
+            $produto['cupons'] = getCuponsByProdutoId($produto['id']);
         }
 
         return $produtos;
     } catch (PDOException $e) {
         return [];
     }
+}
+
+function getCuponsByProdutoId($produto_id) {
+    $conn = getDbConnection();
+    $stmt = $conn->prepare('
+        SELECT c.id, c.codigo, c.desconto, c.validade, c.valor_minimo
+        FROM produto_cupons pc
+        JOIN cupons c ON pc.cupom_id = c.id
+        WHERE pc.produto_id = ?
+    ');
+    $stmt->execute([$produto_id]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function insertProduto($nome, $preco, $estoque) {
