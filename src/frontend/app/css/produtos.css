@@ -1,6 +1,7 @@
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background: linear-gradient(120deg, #e0f7fa 0%, #f4f6f8 100%);
+    background: #181f2a;
+    color: #e3eaf7;
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -9,28 +10,28 @@ body {
 .container {
     max-width: 980px;
     margin: 54px auto;
-    background: #fff;
+    background: #232e43;
     padding: 40px 32px 36px 32px;
     border-radius: 22px;
-    box-shadow: 0 8px 32px rgba(44,62,80,0.13);
-    border: 2px solid #e3f2fd;
+    box-shadow: 0 8px 32px rgba(25,118,210,0.10);
+    border: 2px solid #26334d;
     transition: box-shadow 0.2s;
 }
 
 h1 {
     text-align: center;
-    color: #1976d2;
+    color: #4fc3f7;
     margin-bottom: 26px;
     font-size: 2.5rem;
     letter-spacing: 1px;
     font-weight: 800;
-    text-shadow: 0 2px 8px #e3f2fd;
+    text-shadow: 0 2px 8px #1a2332;
 }
 
 .btn-cadastrar, .btn-salvar, #adicionar-variacao, #btn-refresh {
     display: inline-block;
     padding: 13px 28px;
-    background: linear-gradient(90deg, #1976d2 60%, #4CAF50 100%);
+    background: linear-gradient(90deg, #1976d2 60%, #4fc3f7 100%);
     color: #fff;
     border-radius: 8px;
     border: none;
@@ -46,7 +47,7 @@ h1 {
     overflow: hidden;
 }
 .btn-cadastrar:hover, .btn-salvar:hover, #adicionar-variacao:hover, #btn-refresh:hover {
-    background: linear-gradient(90deg, #1565c0 60%, #388e3c 100%);
+    background: linear-gradient(90deg, #1565c0 60%, #00bcd4 100%);
     transform: translateY(-2px) scale(1.04);
     box-shadow: 0 4px 24px rgba(25,118,210,0.12);
 }
@@ -56,28 +57,28 @@ table {
     border-collapse: separate;
     border-spacing: 0;
     margin-top: 0;
-    background: #fafbfc;
+    background: #232e43;
     border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 2px 12px rgba(44,62,80,0.06);
+    box-shadow: 0 2px 12px rgba(25,118,210,0.10);
 }
 
 th, td {
     padding: 17px 15px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid #26334d;
     text-align: left;
     font-size: 17px;
 }
 
 th {
-    background: #e3f2fd;
-    color: #1976d2;
+    background: #26334d;
+    color: #4fc3f7;
     font-weight: 800;
     letter-spacing: 0.5px;
 }
 
 tr:nth-child(even) {
-    background: #f4f8fb;
+    background: #1a2332;
 }
 
 tr:last-child td {
@@ -85,8 +86,12 @@ tr:last-child td {
 }
 
 tr:hover {
-    background: #e8f5e9;
+    background: #26334d;
     transition: background 0.2s;
+}
+
+td {
+    color: #e3eaf7;
 }
 
 .btn-deletar {
@@ -127,16 +132,37 @@ tr:hover {
     color: #b71c1c;
     background: rgba(229,57,53,0.08);
     transform: scale(1.15);
-}   
+}
+
+button.remover-variacao {
+    background: linear-gradient(90deg, #e53935 60%, #ff7043 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 20px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(229,57,53,0.10);
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    outline: none;
+    display: inline-block;
+    margin-left: 6px;
+}
+button.remover-variacao:hover {
+    background: linear-gradient(90deg, #b71c1c 60%, #ff7043 100%);
+    color: #fff;
+    transform: scale(1.05);
+}
 
 form {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    background: #f8fafb;
+    background: #1a2332;
     border-radius: 12px;
     padding: 28px 20px 20px 20px;
-    box-shadow: 0 2px 8px rgba(44,62,80,0.04);
+    box-shadow: 0 2px 8px rgba(25,118,210,0.10);
     margin-bottom: 0;
 }
 
@@ -148,25 +174,26 @@ form {
 
 label {
     font-weight: 700;
-    color: #1976d2;
+    color: #4fc3f7;
     margin-bottom: 2px;
 }
 
 input[type="text"],
 input[type="number"] {
     padding: 11px;
-    border: 1.7px solid #cfd8dc;
+    border: 1.7px solid #26334d;
     border-radius: 7px;
     font-size: 17px;
-    background: #f8fafb;
+    background: #232e43;
+    color: #e3eaf7;
     transition: border 0.2s, box-shadow 0.2s;
 }
 input[type="text"]:focus,
 input[type="number"]:focus {
-    border: 1.7px solid #1976d2;
+    border: 1.7px solid #4fc3f7;
     outline: none;
-    background: #fff;
-    box-shadow: 0 2px 8px #e3f2fd;
+    background: #181f2a;
+    box-shadow: 0 2px 8px #26334d;
 }
 
 #variacoes-container {
@@ -226,14 +253,14 @@ input[type="number"]:focus {
 .voltar {
     display: block;
     text-align: center;
-    color: #1976d2;
+    color: #4fc3f7;
     text-decoration: none;
     font-weight: 700;
     font-size: 17px;
     transition: color 0.2s;
 }
 .voltar:hover {
-    color: #388e3c;
+    color: #00bcd4;
     text-decoration: underline;
 }
 
@@ -251,9 +278,9 @@ input[type="number"]:focus {
     }
     tr {
         margin-bottom: 20px;
-        background: #fff;
+        background: #232e43;
         border-radius: 10px;
-        box-shadow: 0 1px 4px rgba(44,62,80,0.04);
+        box-shadow: 0 1px 4px rgba(25,118,210,0.10);
         padding: 10px 0;
     }
     td {
@@ -264,7 +291,7 @@ input[type="number"]:focus {
     td:before {
         content: attr(data-label);
         font-weight: 800;
-        color: #1976d2;
+        color: #4fc3f7;
         display: block;
         margin-bottom: 5px;
     }

@@ -6,15 +6,30 @@
     <link rel="stylesheet" href="../app/css/index.css">
 </head>
 <body>
-    <div class="painel">
-        <h1>Montink ERP</h1>
-        <p class="subtitulo">Bem-vindo ao seu painel de gestão</p>
-        <div class="atalhos">
-            <a href="../app/views/produtos.html" class="card">
-                <span class="icon">📦</span>
-                <span>Produtos</span>
-            </a>
+    <nav class="sidebar">
+        <h2>Montink ERP</h2>
+        <div class="menu">
+            <a href="#" class="active" onclick="showPage('home', event)">Home</a>
+            <a href="#" onclick="showPage('produtos', event)">Produtos</a>
+            <a href="#" onclick="showPage('estoque', event)">Estoque</a>
+            <a href="#" onclick="showPage('variacoes', event)">Variações</a>
+        </div>
+    </nav>
+    <div class="main-content">
+        <div id="home" class="painel">
+            <h1>Montink ERP</h1>
+            <p class="subtitulo">Bem-vindo ao seu painel de gestão</p>
+        </div>
+        <div id="produtos" class="iframe-container" style="display:none;">
+            <iframe src="../app/views/produtos.html"></iframe>
+        </div>
+        <div id="estoque" class="iframe-container" style="display:none;">
+            <iframe src="../app/views/estoque.html"></iframe>
+        </div>
+        <div id="variacoes" class="iframe-container" style="display:none;">
+            <iframe src="../app/views/variacoes.html"></iframe>
         </div>
     </div>
+    <script src="../app/js/index.js"></script>
 </body>
 </html>
