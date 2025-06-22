@@ -60,7 +60,12 @@ if (formCadastrarCupom) {
         const resp = await fetch('http://localhost:8000/cupons/create', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ codigo, desconto, validade, valor_minimo })
+            body: JSON.stringify({
+                codigo,
+                desconto,
+                validade: validade === "" ? null : validade, // <-- Garante que o campo exista
+                valor_minimo
+            })
         });
         if (resp.ok) {
             mensagemDiv.textContent = 'Cupom cadastrado com sucesso!';
