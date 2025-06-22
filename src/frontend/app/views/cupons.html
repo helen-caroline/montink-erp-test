@@ -81,6 +81,12 @@
                 document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
                 this.classList.add('active');
                 document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+                
+                // Carrega produtos e cupons ao abrir a aba de visualizar
+                if (this.dataset.tab === 'visualizar') {
+                    if (window.carregarSelectProdutos) carregarSelectProdutos();
+                    if (window.carregarSelectCupons) carregarSelectCupons();
+                }
             });
         });
     </script>

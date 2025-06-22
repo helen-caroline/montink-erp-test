@@ -1,16 +1,18 @@
 function showPage(page, event) {
     if (event) event.preventDefault();
-    // Menu ativo
+    document.querySelectorAll('.painel, .iframe-container').forEach(div => div.style.display = 'none');
     document.querySelectorAll('.menu a').forEach(a => a.classList.remove('active'));
     if (event) event.target.classList.add('active');
-    // Conteúdo
-    document.getElementById('home').style.display = (page === 'home') ? 'block' : 'none';
-    document.getElementById('produtos').style.display = (page === 'produtos') ? 'block' : 'none';
-    document.getElementById('estoque').style.display = (page === 'estoque') ? 'block' : 'none';
-    document.getElementById('cupons').style.display = (page === 'cupons') ? 'block' : 'none';
+    document.getElementById(page).style.display = 'block';
+
+    // Recarrega o iframe de cupons ao abrir a aba Cupons
+    if (page === 'cupons') {
+        const iframe = document.querySelector('#cupons iframe');
+        iframe.src = iframe.src;
+    }
 }
 
 // Inicialização para garantir que a Home apareça ao carregar
 document.addEventListener('DOMContentLoaded', function() {
-    showPage('home');
+    showPage('home'); 
 });

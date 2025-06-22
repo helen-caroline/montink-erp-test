@@ -174,6 +174,9 @@ if (formCadastrarProduto) {
             mensagemDiv.style.color = 'green';
             formCadastrarProduto.reset();
             carregarProdutos();
+            if (typeof carregarSelectProdutos === 'function') {
+                carregarSelectProdutos();
+            }
         } else {
             mensagemDiv.textContent = 'Erro ao cadastrar produto.';
             mensagemDiv.style.color = 'red';
