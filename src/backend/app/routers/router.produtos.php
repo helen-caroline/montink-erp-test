@@ -28,4 +28,9 @@ function handleProdutosRoutes($uri, $method) {
         createProduto();
         return;
     }
+
+    if ($uri === '/produtos/delete' && ($method === 'POST' || $method === 'DELETE')) {
+        deleteProduto();
+        return;
+    }
 }

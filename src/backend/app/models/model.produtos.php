@@ -84,3 +84,27 @@ function insertProdutoComVariacoes($nome, $preco, $variacoes) {
         exit;
     }
 }
+
+function deleteProdutoById($id) {
+    global $user, $pass, $dsn;
+    try {
+        $pdo = new PDO($dsn, $user, $pass);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Exclui estoque das variações do produto
+        $stmt = $pdo->prepare('DELETE FROM estoque WHERE produto_id = ?');
+        $stmt->execute([$id]);
+
+        // Exclui variações do produto
+        $stmt = $pdo->prepare('DELETE FROM variacoes WHERE produto_id = ?');
+        $stmt->execute([$id]);
+
+        // Exclui o produto
+        $stmt = $pdo->prepare('DELETE FROM produtos WHERE id = ?');
+        $stmt->execute([$id]);
+
+        return true;
+    } catch (PDOException $e) {
+        return false;
+    }
+}
