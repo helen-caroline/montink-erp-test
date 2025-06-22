@@ -1,0 +1,317 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #181f2a;
+    color: #e3eaf7;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 980px;
+    margin: 54px auto;
+    background: #232e43;
+    padding: 40px 32px 36px 32px;
+    border-radius: 22px;
+    box-shadow: 0 8px 32px rgba(25,118,210,0.10);
+    border: 2px solid #26334d;
+    transition: box-shadow 0.2s;
+}
+
+h1 {
+    text-align: center;
+    color: #4fc3f7;
+    margin-bottom: 26px;
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+    font-weight: 800;
+    text-shadow: 0 2px 8px #1a2332;
+}
+
+.btn-cadastrar, .btn-salvar, #adicionar-variacao, #btn-refresh {
+    display: inline-block;
+    padding: 13px 28px;
+    background: linear-gradient(90deg, #1976d2 60%, #4fc3f7 100%);
+    color: #fff;
+    border-radius: 8px;
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    box-shadow: 0 2px 12px rgba(25,118,210,0.08);
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    outline: none;
+    position: relative;
+    overflow: hidden;
+}
+.btn-cadastrar:hover, .btn-salvar:hover, #adicionar-variacao:hover, #btn-refresh:hover {
+    background: linear-gradient(90deg, #1565c0 60%, #00bcd4 100%);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 4px 24px rgba(25,118,210,0.12);
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 0;
+    background: #232e43;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(25,118,210,0.10);
+}
+
+th, td {
+    padding: 17px 15px;
+    border-bottom: 1px solid #26334d;
+    text-align: left;
+    font-size: 17px;
+}
+
+th {
+    background: #26334d;
+    color: #4fc3f7;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+tr:nth-child(even) {
+    background: #1a2332;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover {
+    background: #26334d;
+    transition: background 0.2s;
+}
+
+td {
+    color: #e3eaf7;
+}
+
+.btn-deletar {
+    background: linear-gradient(90deg, #e53935 60%, #ff7043 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 9px 15px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.2s;
+    outline: none;
+}
+.btn-deletar:hover {
+    background: linear-gradient(90deg, #b71c1c 60%, #ff7043 100%);
+    transform: scale(1.05);
+}
+
+/* ----------- Variações na Tabela ----------- */
+td:nth-child(5) {
+    vertical-align: middle;
+    /* Garante alinhamento vertical das variações */
+}
+.variacao-list-item {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espaço entre o texto e o botão 🗑️ */
+    min-height: 36px; /* Altura mínima para alinhar todos os botões */
+    padding-right: 8px; /* Pequeno recuo à direita para não colar na borda */
+}
+.variacao-nome-valor {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: left;
+    word-break: break-word;
+}
+.btn-deletar-variacao {
+    min-width: 36px;
+    justify-content: center;
+    background: transparent !important;
+    color: #e53935;
+    border: none;
+    border-radius: 50%;
+    padding: 6px 8px;
+    cursor: pointer;
+    font-size: 1.3rem;
+    font-weight: normal;
+    box-shadow: none;
+    transition: color 0.2s, transform 0.2s;
+    outline: none;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+}
+.btn-deletar-variacao:hover {
+    color: #b71c1c;
+    background: rgba(229,57,53,0.08);
+    transform: scale(1.15);
+}
+
+/* ----------- Variações no Formulário ----------- */
+#variacoes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+.variacao-row {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Mesmo gap das variações da tabela */
+    min-height: 36px;
+    margin-bottom: 4px;
+}
+.variacao-row input[type="text"],
+.variacao-row input[type="number"] {
+    flex: 1 1 0;
+    min-width: 0;
+}
+button.remover-variacao {
+    background: linear-gradient(90deg, #e53935 60%, #ff7043 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 20px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(229,57,53,0.10);
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    outline: none;
+    display: inline-block;
+    margin-left: 6px;
+}
+button.remover-variacao:hover {
+    background: linear-gradient(90deg, #b71c1c 60%, #ff7043 100%);
+    color: #fff;
+    transform: scale(1.05);
+}
+
+/* ----------- Formulário ----------- */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: #1a2332;
+    border-radius: 12px;
+    padding: 28px 20px 20px 20px;
+    box-shadow: 0 2px 8px rgba(25,118,210,0.10);
+    margin-bottom: 0;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+label {
+    font-weight: 700;
+    color: #4fc3f7;
+    margin-bottom: 2px;
+}
+
+input[type="text"],
+input[type="number"] {
+    padding: 11px;
+    border: 1.7px solid #26334d;
+    border-radius: 7px;
+    font-size: 17px;
+    background: #232e43;
+    color: #e3eaf7;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+input[type="text"]:focus,
+input[type="number"]:focus {
+    border: 1.7px solid #4fc3f7;
+    outline: none;
+    background: #181f2a;
+    box-shadow: 0 2px 8px #26334d;
+}
+
+#adicionar-variacao {
+    margin-bottom: 10px;
+    margin-top: 5px;
+    background: linear-gradient(90deg, #1976d2 60%, #00bcd4 100%);
+}
+#adicionar-variacao:hover {
+    background: linear-gradient(90deg, #1565c0 60%, #0097a7 100%);
+}
+
+#mensagem-cadastro {
+    text-align: center;
+    font-size: 1.15rem;
+    margin-bottom: 10px;
+    min-height: 28px;
+    font-weight: 600;
+}
+#mensagem-cadastro:empty {
+    min-height: 0;
+}
+
+#mensagem-cadastro[style*="green"]::before {
+    content: "✅ ";
+}
+#mensagem-cadastro[style*="red"]::before {
+    content: "❌ ";
+}
+
+.botoes-voltar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 32px;
+}
+
+.voltar {
+    display: block;
+    text-align: center;
+    color: #4fc3f7;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 17px;
+    transition: color 0.2s;
+}
+.voltar:hover {
+    color: #00bcd4;
+    text-decoration: underline;
+}
+
+/* ----------- Responsividade ----------- */
+@media (max-width: 700px) {
+    .container {
+        max-width: 98vw;
+        padding: 14px 2vw;
+    }
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    thead tr {
+        display: none;
+    }
+    tr {
+        margin-bottom: 20px;
+        background: #232e43;
+        border-radius: 10px;
+        box-shadow: 0 1px 4px rgba(25,118,210,0.10);
+        padding: 10px 0;
+    }
+    td {
+        padding: 12px 14px;
+        border: none;
+        position: relative;
+    }
+    td:before {
+        content: attr(data-label);
+        font-weight: 800;
+        color: #4fc3f7;
+        display: block;
+        margin-bottom: 5px;
+    }
+}
