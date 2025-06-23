@@ -40,4 +40,8 @@ function handleProdutosRoutes($uri, $method) {
         deleteVariacao();
         return;
     }
+    if ($uri === '/produtos/cupom/desvincular' && ($method === 'DELETE' || $method === 'POST')) {
+        desvincularCupomProduto();
+        return;
+    }
 }

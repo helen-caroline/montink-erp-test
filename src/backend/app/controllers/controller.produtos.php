@@ -78,3 +78,23 @@ function deleteVariacao() {
     }
     exit;
 }
+
+function desvincularCupomProduto() {
+    header('Access-Control-Allow-Origin: *');
+    $data = json_decode(file_get_contents('php://input'), true);
+
+    if (!isset($data['cupom_id']) || !isset($data['produto_id'])) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Dados incompletos']);
+        exit;
+    }
+
+    $ok = desvincularCupomDoProduto($data['produto_id'], $data['cupom_id']);
+    if ($ok) {
+        echo json_encode(['success' => true]);
+    } else {
+        http_response_code(500);
+        echo json_encode(['error' => 'Erro ao desvincular cupom']);
+    }
+    exit;
+}

@@ -10,6 +10,12 @@ function showPage(page, event) {
         const iframe = document.querySelector('#cupons iframe');
         iframe.src = iframe.src;
     }
+
+    // Recarrega o iframe de estoque ao abrir a aba Estoque
+    if (page === 'estoque') {
+        const iframe = document.querySelector('#estoque iframe');
+        iframe.src = iframe.src;
+    }
 }
 
 // Inicialização para garantir que a Home apareça ao carregar

@@ -15,7 +15,7 @@ async function carregarCupons() {
                 <td>${validadeStr}</td>
                 <td>R$ ${parseFloat(cupom.valor_minimo).toFixed(2)}</td>
                 <td>
-                    <button class="btn-deletar" data-id="${cupom.id}">Deletar</button>
+                    <button class="btn-deletar" data-id="${cupom.id}" title="Deletar cupom">🗑️</button>
                 </td>
             `;
             tbody.appendChild(tr);

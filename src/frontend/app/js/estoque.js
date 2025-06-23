@@ -24,10 +24,13 @@ async function carregarProdutos() {
             let cuponsStr = '-';
             if (produto.cupons && produto.cupons.length > 0) {
                 cuponsStr = produto.cupons.map(c => 
-                    `<span class="cupom-list-item" title="Desconto: R$ ${parseFloat(c.desconto).toFixed(2)}">
-                        [${c.id}] ${c.codigo}
+                    `<span class="cupom-list-item">
+                        <span class="cupom-nome-valor" title="Desconto: R$ ${parseFloat(c.desconto).toFixed(2)}">
+                            [${c.id}] ${c.codigo}
+                        </span>
+                        <button class="btn-deletar-cupom-produto" data-cupom-id="${c.id}" data-produto-id="${produto.id}" title="Desvincular cupom">🗑️</button>
                     </span>`
-                ).join(', ');
+                ).join('<br>');
             }
     
             const tr = document.createElement('tr');
@@ -95,6 +98,27 @@ async function carregarProdutos() {
                         carregarProdutos();
                     } else {
                         alert('Erro ao deletar variação.');
+                    }
+                }
+            });
+        });
+
+        // Adiciona evento aos botões de deletar cupom vinculado ao produto
+        document.querySelectorAll('.btn-deletar-cupom-produto').forEach(btn => {
+            btn.addEventListener('click', async function(e) {
+                e.stopPropagation();
+                const cupom_id = this.getAttribute('data-cupom-id');
+                const produto_id = this.getAttribute('data-produto-id');
+                if (confirm('Deseja realmente desvincular este cupom do produto?')) {
+                    const resp = await fetch('http://localhost:8000/produtos/cupom/desvincular', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ cupom_id, produto_id })
+                    });
+                    if (resp.ok) {
+                        carregarProdutos();
+                    } else {
+                        alert('Erro ao desvincular cupom.');
                     }
                 }
             });

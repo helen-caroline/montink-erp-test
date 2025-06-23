@@ -92,3 +92,14 @@ function deleteVariacaoById($id) {
         return false;
     }
 }
+
+function desvincularCupomDoProduto($produto_id, $cupom_id) {
+    $conn = getDbConnection();
+    try {
+        $stmt = $conn->prepare('DELETE FROM produto_cupons WHERE produto_id = ? AND cupom_id = ?');
+        $stmt->execute([$produto_id, $cupom_id]);
+        return $stmt->rowCount() > 0;
+    } catch (PDOException $e) {
+        return false;
+    }
+}
