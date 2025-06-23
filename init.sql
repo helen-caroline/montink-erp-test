@@ -38,18 +38,6 @@ CREATE TABLE pedidos (
     criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE pedido_itens (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    pedido_id INT,
-    produto_id INT,
-    variacao_id INT,
-    quantidade INT,
-    preco_unitario DECIMAL(10,2),
-    FOREIGN KEY (pedido_id) REFERENCES pedidos(id),
-    FOREIGN KEY (produto_id) REFERENCES produtos(id),
-    FOREIGN KEY (variacao_id) REFERENCES variacoes(id)
-);
-
 CREATE TABLE produto_cupons (
     id INT AUTO_INCREMENT PRIMARY KEY,
     produto_id INT,

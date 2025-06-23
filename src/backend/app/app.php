@@ -3,6 +3,7 @@
 
 require_once __DIR__ . '/routers/router.produtos.php';
 require_once __DIR__ . '/routers/router.cupons.php';
+require_once __DIR__ . '/routers/router.pedidos.php';
 
 function handleRequest() {
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -11,6 +12,12 @@ function handleRequest() {
     // Rotas de produtos
     if (strpos($uri, '/produtos') === 0) {
         handleProdutosRoutes($uri, $method);
+        return;
+    }
+
+    // Rotas de pedidos
+    if (strpos($uri, '/pedidos') === 0) {
+        handlePedidosRoutes($uri, $method);
         return;
     }
 

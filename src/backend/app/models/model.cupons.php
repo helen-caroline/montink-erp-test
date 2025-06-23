@@ -7,7 +7,12 @@ function getCupons($conn) {
 }
 
 function deleteCupom($conn, $id) {
-    $stmt = $conn->prepare("DELETE FROM cupons WHERE id = ?");
+    // Remove vínculos primeiro
+    $stmt = $conn->prepare('DELETE FROM produto_cupons WHERE cupom_id = ?');
+    $stmt->execute([$id]);
+
+    // Agora deleta o cupom
+    $stmt = $conn->prepare('DELETE FROM cupons WHERE id = ?');
     return $stmt->execute([$id]);
 }
 
