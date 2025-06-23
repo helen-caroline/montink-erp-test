@@ -28,14 +28,33 @@ function viewPedidoById($id) {
 function createPedido() {
     $conn = getDbConnection();
     $pedido = json_decode(file_get_contents('php://input'), true);
-    
+
+    // Validação básica dos campos do pedido
     if (!$pedido || !isset($pedido['frete'], $pedido['total'], $pedido['status'], $pedido['endereco'], $pedido['cep'], $pedido['email'])) {
         http_response_code(400);
-        echo json_encode(['error' => 'Invalid input']);
+        echo json_encode(['error' => 'Campos obrigatórios do pedido faltando']);
         exit;
     }
-    
+
+    // Validação dos produtos
+    if (!isset($pedido['produtos']) || !is_array($pedido['produtos']) || count($pedido['produtos']) == 0) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Produtos não enviados ou formato inválido']);
+        exit;
+    }
+
+    // Validação de cada produto no array
+    foreach ($pedido['produtos'] as $produto) {
+        if (!isset($produto['produto_id']) || !isset($produto['quantidade']) || !is_numeric($produto['quantidade']) || $produto['quantidade'] <= 0) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Produto com dados inválidos']);
+            exit;
+        }
+    }
+
+    // Chama a função que insere o pedido e os produtos
     $id = postPedido($conn, $pedido);
+
     header('Content-Type: application/json');
     echo json_encode(['id' => $id]);
     exit;
