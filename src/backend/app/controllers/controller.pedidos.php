@@ -84,19 +84,18 @@ function updateProdutoDoPedido($pedido_id, $produto_id) {
     $conn = getDbConnection();
     $dados = json_decode(file_get_contents('php://input'), true);
 
-    if (!$dados) {
+    if (!$dados || !isset($dados['quantidade'])) {
         http_response_code(400);
-        echo json_encode(['error' => 'Dados inválidos']);
+        echo json_encode(['error' => 'Campo quantidade obrigatório']);
         exit;
     }
 
-    // Chama a função do MODEL com o novo nome
-    $ok = model_updateProdutoDoPedido($conn, $pedido_id, $produto_id, $dados);
+    $ok = model_updateProdutoDoPedido($conn, $pedido_id, $produto_id, ['quantidade' => $dados['quantidade']]);
     if ($ok) {
         echo json_encode(['success' => true]);
     } else {
         http_response_code(400);
-        echo json_encode(['error' => 'Erro ao atualizar produto do pedido']);
+        echo json_encode(['error' => 'Erro ao atualizar quantidade do produto no pedido']);
     }
     exit;
 }

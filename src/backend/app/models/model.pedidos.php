@@ -128,27 +128,11 @@ function updatePedidoById($conn, $id, $dados) {
 }
 
 function model_updateProdutoDoPedido($conn, $pedido_id, $produto_id, $dados) {
-    // Atualiza quantidade na tabela pedidos_produtos
+    // Atualiza apenas a quantidade na tabela pedidos_produtos
     if (isset($dados['quantidade'])) {
         $stmt = $conn->prepare("UPDATE pedidos_produtos SET quantidade = ? WHERE pedido_id = ? AND produto_id = ?");
         $stmt->execute([$dados['quantidade'], $pedido_id, $produto_id]);
+        return $stmt->rowCount() > 0;
     }
-
-    // Atualiza campos do produto na tabela produtos
-    $campos = [];
-    $valores = [];
-    foreach (['nome','preco','estoque','cor','modelo','marca'] as $campo) {
-        if (isset($dados[$campo])) {
-            $campos[] = "$campo = ?";
-            $valores[] = $dados[$campo];
-        }
-    }
-    if (!empty($campos)) {
-        $valores[] = $produto_id;
-        $sql = "UPDATE produtos SET " . implode(', ', $campos) . " WHERE id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute($valores);
-    }
-
-    return true;
+    return false;
 }

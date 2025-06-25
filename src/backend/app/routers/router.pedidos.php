@@ -6,7 +6,7 @@ function handlePedidosRoutes($uri, $method) {
     // Suporte a CORS para preflight (OPTIONS)
     if ($method === 'OPTIONS') {
         header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS');
+        header('Access-Control-Allow-Methods: GET, POST, DELETE, PUT, PATCH, OPTIONS');
         header('Access-Control-Allow-Headers: Content-Type');
         http_response_code(204);
         exit;
