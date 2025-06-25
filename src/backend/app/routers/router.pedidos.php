@@ -22,12 +22,26 @@ function handlePedidosRoutes($uri, $method) {
         exit;
     }
 
-    if (preg_match('#^/pedidos/update/(\d+)$#', $uri, $matches) && $method === 'PATCH' || $method === 'PUT' || $method === 'POST') {
+    if (
+        preg_match('#^/pedidos/update/(\d+)$#', $uri, $matches)
+        && (
+            $method === 'PATCH'
+            || $method === 'PUT'
+            || $method === 'POST'
+        )
+    ) {
         updatePedido((int)$matches[1]);
         exit;
     }
 
-    if (preg_match('#^/pedidos/produto/update/(\d+)/(\d+)$#', $uri, $matches) && $method === 'PATCH' || $method === 'PUT' || $method === 'POST') {
+    if (
+        preg_match('#^/pedidos/produto/update/(\d+)/(\d+)$#', $uri, $matches)
+        && (
+            $method === 'PATCH'
+            || $method === 'PUT'
+            || $method === 'POST'
+        )
+    ) {
         updateProdutoDoPedido((int)$matches[1], (int)$matches[2]);
         exit;
     }
