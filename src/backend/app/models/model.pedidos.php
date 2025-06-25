@@ -108,3 +108,47 @@ function postVincularPedidoProduto($conn, $pedidoId, $produtoId, $quantidade) {
     $stmt->execute([$pedidoId, $produtoId, $quantidade]);
     return $stmt->rowCount() > 0;
 }
+
+function updatePedidoById($conn, $id, $dados) {
+    $campos = [];
+    $valores = [];
+
+    foreach (['frete','total','status','endereco','cep','email'] as $campo) {
+        if (isset($dados[$campo])) {
+            $campos[] = "$campo = ?";
+            $valores[] = $dados[$campo];
+        }
+    }
+    if (empty($campos)) return false;
+
+    $valores[] = $id;
+    $sql = "UPDATE pedidos SET " . implode(', ', $campos) . " WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    return $stmt->execute($valores);
+}
+
+function model_updateProdutoDoPedido($conn, $pedido_id, $produto_id, $dados) {
+    // Atualiza quantidade na tabela pedidos_produtos
+    if (isset($dados['quantidade'])) {
+        $stmt = $conn->prepare("UPDATE pedidos_produtos SET quantidade = ? WHERE pedido_id = ? AND produto_id = ?");
+        $stmt->execute([$dados['quantidade'], $pedido_id, $produto_id]);
+    }
+
+    // Atualiza campos do produto na tabela produtos
+    $campos = [];
+    $valores = [];
+    foreach (['nome','preco','estoque','cor','modelo','marca'] as $campo) {
+        if (isset($dados[$campo])) {
+            $campos[] = "$campo = ?";
+            $valores[] = $dados[$campo];
+        }
+    }
+    if (!empty($campos)) {
+        $valores[] = $produto_id;
+        $sql = "UPDATE produtos SET " . implode(', ', $campos) . " WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($valores);
+    }
+
+    return true;
+}

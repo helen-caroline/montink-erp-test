@@ -44,4 +44,10 @@ function handleProdutosRoutes($uri, $method) {
         desvincularCupomProduto();
         return;
     }
+
+    // Rotas : UPDATE
+    if (preg_match('#^/produtos/update/(\d+)$#', $uri, $matches) && $method === 'PUT' || $method === 'PATH' || $method === 'POST') {
+        updateProduto((int)$matches[1]);
+        return;
+    }
 }

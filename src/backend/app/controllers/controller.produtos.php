@@ -98,3 +98,23 @@ function desvincularCupomProduto() {
     }
     exit;
 }
+
+function updateProduto($id) {
+    header('Access-Control-Allow-Origin: *');
+    $dados = json_decode(file_get_contents('php://input'), true);
+
+    if (!$dados) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Dados inválidos']);
+        exit;
+    }
+
+    $ok = updateProdutoById($id, $dados);
+    if ($ok) {
+        echo json_encode(['success' => true]);
+    } else {
+        http_response_code(500);
+        echo json_encode(['error' => 'Erro ao atualizar produto']);
+    }
+    exit;
+}

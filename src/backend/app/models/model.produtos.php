@@ -103,3 +103,22 @@ function desvincularCupomDoProduto($produto_id, $cupom_id) {
         return false;
     }
 }
+
+function updateProdutoById($id, $dados) {
+    $conn = getDbConnection();
+    $campos = [];
+    $valores = [];
+
+    foreach (['nome','preco','estoque','cor','modelo','marca'] as $campo) {
+        if (isset($dados[$campo])) {
+            $campos[] = "$campo = ?";
+            $valores[] = $dados[$campo];
+        }
+    }
+    if (empty($campos)) return false;
+
+    $valores[] = $id;
+    $sql = "UPDATE produtos SET " . implode(', ', $campos) . " WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    return $stmt->execute($valores);
+}

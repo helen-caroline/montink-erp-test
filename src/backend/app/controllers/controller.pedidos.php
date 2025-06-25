@@ -59,3 +59,44 @@ function createPedido() {
     echo json_encode(['id' => $id]);
     exit;
 }
+
+function updatePedido($id) {
+    $conn = getDbConnection();
+    $dados = json_decode(file_get_contents('php://input'), true);
+
+    if (!$dados) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Dados inválidos']);
+        exit;
+    }
+
+    $ok = updatePedidoById($conn, $id, $dados);
+    if ($ok) {
+        echo json_encode(['success' => true]);
+    } else {
+        http_response_code(500);
+        echo json_encode(['error' => 'Erro ao atualizar pedido']);
+    }
+    exit;
+}
+
+function updateProdutoDoPedido($pedido_id, $produto_id) {
+    $conn = getDbConnection();
+    $dados = json_decode(file_get_contents('php://input'), true);
+
+    if (!$dados) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Dados inválidos']);
+        exit;
+    }
+
+    // Chama a função do MODEL com o novo nome
+    $ok = model_updateProdutoDoPedido($conn, $pedido_id, $produto_id, $dados);
+    if ($ok) {
+        echo json_encode(['success' => true]);
+    } else {
+        http_response_code(400);
+        echo json_encode(['error' => 'Erro ao atualizar produto do pedido']);
+    }
+    exit;
+}

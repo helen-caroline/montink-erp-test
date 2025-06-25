@@ -8,8 +8,6 @@ CREATE TABLE produtos (
     marca VARCHAR(100)
 );
 
-
-
 CREATE TABLE variacoes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     produto_id INT,
@@ -28,7 +26,6 @@ CREATE TABLE cupons (
 
 CREATE TABLE pedidos (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    subtotal DECIMAL(10,2),
     frete DECIMAL(10,2),
     total DECIMAL(10,2),
     status VARCHAR(50),
@@ -36,6 +33,15 @@ CREATE TABLE pedidos (
     cep VARCHAR(9),
     email VARCHAR(100),
     criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE pedidos_produtos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pedido_id INT,
+    produto_id INT,
+    quantidade INT,
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id),
+    FOREIGN KEY (produto_id) REFERENCES produtos(id)
 );
 
 CREATE TABLE produto_cupons (
