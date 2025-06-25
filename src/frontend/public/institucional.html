@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Faça seu Pedido</title>
+    <link rel="stylesheet" href="../app/css/institucional.css">
+</head>
+<body>
+    <div class="container-flex">
+        <div class="coluna" id="col-catalogo">
+            <h1>Monte seu Pedido</h1>
+            <h2>Catálogo de Produtos</h2>
+            <div id="catalogo-produtos"></div>
+        </div>
+        <div class="coluna" id="col-carrinho">
+            <h2>Carrinho</h2>
+            <div id="carrinho"></div>
+            <button id="btn-finalizar" style="width:100%;margin-top:18px;">Finalizar Pedido</button>
+            <div id="mensagem"></div>
+        </div>
+    </div>
+
+    <!-- Modal para dados de entrega -->
+    <div class="modal-bg" id="modal-bg">
+        <div class="modal">
+            <span class="modal-close" id="fechar-modal">&times;</span>
+            <h2>Dados para Entrega</h2>
+            <form id="form-pedido">
+                <label>Email: <input type="email" name="email" required></label><br>
+                <label>Endereço: <input type="text" name="endereco" required></label><br>
+                <label>CEP: <input type="text" name="cep" required></label><br>
+                <button type="submit">Enviar Pedido</button>
+            </form>
+        </div>
+    </div>
+    <script src="../app/js/institucional.js"></script>
+</body>
+</html>

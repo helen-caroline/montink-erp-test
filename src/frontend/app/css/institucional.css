@@ -1,0 +1,118 @@
+body {
+    background: #181f2a;
+    color: #e3eaf7;
+    font-family: Arial, sans-serif;
+}
+.container-flex {
+    display: flex;
+    max-width: 1100px;
+    margin: 40px auto;
+    gap: 32px;
+    align-items: flex-start;
+}
+.coluna {
+    background: #232e43;
+    border-radius: 18px;
+    padding: 32px 24px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+    flex: 1;
+    min-width: 320px;
+}
+#col-carrinho {
+    max-width: 370px;
+}
+h1, h2 {
+    color: #4fc3f7;
+}
+#catalogo-produtos, #carrinho {
+    margin-bottom: 24px;
+}
+.produto {
+    background: #181f2a;
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.produto input[type="number"] {
+    width: 50px;
+    margin-left: 8px;
+}
+.carrinho-lista {
+    margin-bottom: 10px;
+}
+.carrinho-lista span {
+    margin-right: 12px;
+}
+button, #btn-finalizar {
+    background: #4fc3f7;
+    color: #232e43;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 1rem;
+}
+#mensagem {
+    margin-top: 18px;
+    color: #4fc3f7;
+    font-weight: bold;
+}
+
+/* Modal */
+.modal-bg {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.35);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.modal {
+    background: #232e43;
+    padding: 28px 24px 20px 24px;
+    border-radius: 14px;
+    min-width: 340px;
+    max-width: 420px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+    position: relative;
+    animation: modalShow 0.2s;
+    color: #e3eaf7;
+}
+@keyframes modalShow {
+    from { transform: translateY(40px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+}
+.modal-close {
+    position: absolute;
+    right: 18px;
+    top: 12px;
+    font-size: 1.7rem;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.modal-close:hover {
+    color: #e74c3c;
+}
+.modal h2 {
+    margin-top: 0;
+    font-size: 1.3rem;
+    color: #4fc3f7;
+    margin-bottom: 12px;
+}
+@media (max-width: 900px) {
+    .container-flex {
+        flex-direction: column;
+        gap: 0;
+    }
+    #col-carrinho {
+        max-width: 100%;
+        margin-top: 24px;
+    }
+}

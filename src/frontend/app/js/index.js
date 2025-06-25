@@ -18,6 +18,13 @@ function showPage(page, event) {
     }
 }
 
+function recarregarPedidosIframe() {
+    const iframe = document.querySelector('#pedidos iframe');
+    if (iframe) {
+        iframe.contentWindow.location.reload();
+    }
+}
+
 // Inicialização para garantir que a Home apareça ao carregar
 document.addEventListener('DOMContentLoaded', function() {
     showPage('home'); 
