@@ -23,6 +23,9 @@ function renderCatalogo() {
     });
 }
 
+let descontoCupom = 0;
+let cupomAplicado = null;
+
 function renderCarrinho() {
     const car = document.getElementById('carrinho');
     if (carrinho.length === 0) {
@@ -30,7 +33,10 @@ function renderCarrinho() {
         document.getElementById('btn-finalizar').disabled = true;
         return;
     }
-    let total = carrinho.reduce((s, item) => s + item.preco * item.quantidade, 0);
+    let total = carrinho.reduce((s, item) => s + item.preco * item.quantidade, 0) + 50;
+    let totalFinal = total - descontoCupom;
+    if (totalFinal < 0) totalFinal = 0;
+
     car.innerHTML = `
         <div class="carrinho-lista">
             ${carrinho.map(item => `
@@ -40,7 +46,8 @@ function renderCarrinho() {
             `).join('<br>')}
         </div>
         <div><b>Frete:</b> R$ 50,00</div>
-        <div><b>Total:</b> R$ ${(total + 50).toFixed(2)}</div>
+        ${cupomAplicado ? `<div style="color:#4fc3f7;"><b>Cupom aplicado:</b> ${cupomAplicado.codigo} (-R$ ${descontoCupom.toFixed(2)})</div>` : ''}
+        <div><b>Total:</b> R$ ${totalFinal.toFixed(2)}</div>
     `;
     document.getElementById('btn-finalizar').disabled = false;
 }
@@ -88,6 +95,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnFinalizar = document.getElementById('btn-finalizar');
     const mensagem = document.getElementById('mensagem');
 
+    if (!formPedido.querySelector('input[name="cupom_codigo"]')) {
+        const labelCupom = document.createElement('label');
+        labelCupom.innerHTML = 'Cupom: <input type="text" name="cupom_codigo" placeholder="Código do cupom">';
+        formPedido.insertBefore(labelCupom, formPedido.querySelector('button[type="submit"]'));
+    }
+
     btnFinalizar.onclick = () => {
         if (carrinho.length === 0) {
             alert('Adicione produtos ao carrinho!');
@@ -107,6 +120,55 @@ document.addEventListener('DOMContentLoaded', () => {
     fecharModal.onclick = () => modalBg.style.display = 'none';
     modalBg.onclick = e => { if (e.target === modalBg) modalBg.style.display = 'none'; };
 
+    const inputCupom = document.getElementById('input-cupom');
+    const btnAplicarCupom = document.getElementById('btn-aplicar-cupom');
+    const mensagemCupom = document.getElementById('mensagem-cupom');
+
+    btnAplicarCupom.onclick = async function() {
+        const codigo = inputCupom.value.trim();
+        mensagemCupom.style.color = '#e74c3c';
+        mensagemCupom.textContent = '';
+        descontoCupom = 0;
+        cupomAplicado = null;
+
+        if (!codigo) {
+            mensagemCupom.textContent = 'Digite um código de cupom.';
+            renderCarrinho();
+            return;
+        }
+
+        // Busca cupons no backend
+        const resp = await fetch(API + '/cupons/view');
+        const data = await resp.json();
+        const cupom = (data.cupons || []).find(c => c.codigo.toLowerCase() === codigo.toLowerCase());
+
+        if (!cupom) {
+            mensagemCupom.textContent = 'Cupom não encontrado.';
+            renderCarrinho();
+            return;
+        }
+
+        // Validação de validade e valor mínimo
+        const hoje = new Date().toISOString().slice(0, 10);
+        if (cupom.validade && cupom.validade < hoje) {
+            mensagemCupom.textContent = 'Cupom expirado.';
+            renderCarrinho();
+            return;
+        }
+        let total = carrinho.reduce((s, item) => s + item.preco * item.quantidade, 0) + 50;
+        if (total < parseFloat(cupom.valor_minimo)) {
+            mensagemCupom.textContent = `Valor mínimo para usar este cupom: R$ ${parseFloat(cupom.valor_minimo).toFixed(2)}`;
+            renderCarrinho();
+            return;
+        }
+
+        descontoCupom = Math.abs(parseFloat(cupom.desconto));
+        cupomAplicado = cupom;
+        mensagemCupom.style.color = '#4fc3f7';
+        mensagemCupom.textContent = `Cupom aplicado: ${cupom.codigo} (-R$ ${descontoCupom.toFixed(2)})`;
+        renderCarrinho();
+    };
+
     formPedido.onsubmit = async function(e) {
         e.preventDefault();
         if (carrinho.length === 0) {
@@ -114,18 +176,28 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         const form = e.target;
+        let total = carrinho.reduce((s, item) => s + item.preco * item.quantidade, 0) + 50;
+        let totalFinal = total - descontoCupom;
+        if (totalFinal < 0) totalFinal = 0;
+    
         const pedido = {
             frete: 50,
-            total: carrinho.reduce((s, item) => s + item.preco * item.quantidade, 0) + 50,
+            total: totalFinal,
             status: 'Pendente',
             endereco: form.endereco.value,
             cep: form.cep.value,
             email: form.email.value,
+            cupom_codigo: cupomAplicado ? cupomAplicado.codigo : '',
             produtos: carrinho.map(item => ({
                 produto_id: item.produto_id,
                 quantidade: item.quantidade
             }))
         };
+
+        if (form.cupom_codigo && form.cupom_codigo.value.trim() !== '') {
+            pedido.cupom_codigo = form.cupom_codigo.value.trim();
+        }
+    
         const resp = await fetch(API + '/pedidos/create', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -138,8 +210,13 @@ document.addEventListener('DOMContentLoaded', () => {
             form.reset();
             modalBg.style.display = 'none';
         } else {
-            const erro = await resp.text();
-            mensagem.innerText = 'Erro: ' + erro;
+            const erro = await resp.json().catch(() => ({}));
+            mensagem.innerText = 'Erro: ' + (erro.error || 'Erro ao criar pedido');
+            // Se for erro de cupom, também mostra no campo do cupom
+            if (erro.error && erro.error.toLowerCase().includes('cupom')) {
+                mensagemCupom.textContent = erro.error;
+                mensagemCupom.style.color = '#e74c3c';
+            }
         }
     };
 });

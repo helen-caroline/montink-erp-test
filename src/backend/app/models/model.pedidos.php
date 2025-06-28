@@ -77,24 +77,72 @@ function getPedidoById($conn, $id) {
 }
 
 function postPedido($conn, $pedido) {
+    $descontoCupom = 0;
+    if (!empty($pedido['cupom_codigo'])) {
+        // Busca cupom
+        $stmt = $conn->prepare("SELECT * FROM cupons WHERE codigo = ?");
+        $stmt->execute([$pedido['cupom_codigo']]);
+        $cupom = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($cupom) {
+            // Validação de validade e valor mínimo
+            $hoje = date('Y-m-d');
+            if ($cupom['validade'] && $cupom['validade'] < $hoje) {
+                throw new Exception('Cupom expirado');
+            }
+            if ($pedido['total'] < $cupom['valor_minimo']) {
+                throw new Exception('Valor mínimo para o cupom não atingido');
+            }
+
+            // NOVO: Verifica se o cupom está vinculado a pelo menos um produto do pedido
+            $produtoIds = array_map(function($p) { return $p['produto_id']; }, $pedido['produtos']);
+            $in = implode(',', array_fill(0, count($produtoIds), '?'));
+            $sql = "SELECT 1 FROM produto_cupons WHERE cupom_id = ? AND produto_id IN ($in) LIMIT 1";
+            $params = array_merge([$cupom['id']], $produtoIds);
+            $stmtVinculo = $conn->prepare($sql);
+            $stmtVinculo->execute($params);
+            if (!$stmtVinculo->fetch()) {
+                throw new Exception('Cupom não está vinculado a nenhum produto do pedido');
+            }
+
+            $descontoCupom = floatval($cupom['desconto']);
+        } else {
+            throw new Exception('Cupom não encontrado');
+        }
+    }
+
+    // Aplica desconto
+    $totalComDesconto = $pedido['total'];
+    if ($totalComDesconto < 0) $totalComDesconto = 0;
+
     // Inserir o pedido
-    $stmt = $conn->prepare("INSERT INTO pedidos (frete, total, status, endereco, cep, email) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO pedidos (frete, total, status, endereco, cep, email, cupom_codigo) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->execute([
         $pedido['frete'],
-        $pedido['total'],
+        $totalComDesconto,
         $pedido['status'],
         $pedido['endereco'],
         $pedido['cep'],
-        $pedido['email']
-    ]);
-
+        $pedido['email'],
+        $pedido['cupom_codigo'] ?? null
+]);
     $pedidoId = $conn->lastInsertId();
 
-    // Verificar se vieram produtos
+    // Verificar se vieram produtos e baixar estoque
     if (isset($pedido['produtos']) && is_array($pedido['produtos'])) {
         foreach ($pedido['produtos'] as $produto) {
             $produtoId = $produto['produto_id'];
             $quantidade = isset($produto['quantidade']) ? $produto['quantidade'] : 1;
+
+            // Baixar estoque
+            $stmtEstoque = $conn->prepare("SELECT estoque FROM produtos WHERE id = ?");
+            $stmtEstoque->execute([$produtoId]);
+            $estoqueAtual = $stmtEstoque->fetchColumn();
+            if ($estoqueAtual === false || $estoqueAtual < $quantidade) {
+                throw new Exception("Estoque insuficiente para o produto ID $produtoId");
+            }
+            $stmtBaixa = $conn->prepare("UPDATE produtos SET estoque = estoque - ? WHERE id = ?");
+            $stmtBaixa->execute([$quantidade, $produtoId]);
 
             postVincularPedidoProduto($conn, $pedidoId, $produtoId, $quantidade);
         }

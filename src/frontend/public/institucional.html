@@ -30,6 +30,12 @@
                 <label>Email: <input type="email" name="email" required></label><br>
                 <label>Endereço: <input type="text" name="endereco" required></label><br>
                 <label>CEP: <input type="text" name="cep" required></label><br>
+                <label>
+                    Cupom:
+                    <input type="text" name="cupom_codigo" id="input-cupom" placeholder="Código do cupom">
+                    <button type="button" id="btn-aplicar-cupom" style="margin-left:8px;">Aplicar Cupom</button>
+                </label>
+                <div id="mensagem-cupom" style="color:#e74c3c;font-size:0.97em;margin-bottom:8px;"></div>
                 <button type="submit">Enviar Pedido</button>
             </form>
         </div>

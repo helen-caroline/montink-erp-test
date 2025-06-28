@@ -33,6 +33,7 @@ CREATE TABLE pedidos (
     cep VARCHAR(9),
     email VARCHAR(100),
     criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
+    cupom_codigo VARCHAR(255) NULL,
 );
 
 CREATE TABLE pedidos_produtos (

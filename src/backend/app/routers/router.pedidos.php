@@ -46,4 +46,12 @@ function handlePedidosRoutes($uri, $method) {
         exit;
     }
 
+    if (
+        preg_match('#^/pedidos/delete/(\d+)$#', $uri, $matches)
+        && ($method === 'DELETE' || $method === 'POST')
+    ) {
+        deletePedido((int)$matches[1]);
+        exit;
+    }
+
 }

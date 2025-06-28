@@ -8,9 +8,15 @@
 <body>
     <div class="container">
         <h1>Pedidos</h1>
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+            <button id="btn-excluir-selecionados-pedidos" class="btn-deletar" style="margin-bottom:0;">Excluir Selecionados</button>
+        </div>
         <table id="tabela-pedidos">
             <thead>
                 <tr>
+                    <th>
+                        <input type="checkbox" id="selecionar-todos-pedidos" title="Selecionar todos">
+                    </th>
                     <th>ID</th>
                     <th>Cliente (E-mail)</th>
                     <th>Status</th>

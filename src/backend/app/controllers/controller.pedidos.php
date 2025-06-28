@@ -52,6 +52,16 @@ function createPedido() {
         }
     }
 
+    try {
+        $id = postPedido($conn, $pedido);
+        header('Content-Type: application/json');
+        echo json_encode(['id' => $id]);
+    } catch (Exception $e) {
+        http_response_code(400);
+        echo json_encode(['error' => $e->getMessage()]);
+    }
+    exit;
+
     // Chama a função que insere o pedido e os produtos
     $id = postPedido($conn, $pedido);
 
@@ -96,6 +106,23 @@ function updateProdutoDoPedido($pedido_id, $produto_id) {
     } else {
         http_response_code(400);
         echo json_encode(['error' => 'Erro ao atualizar quantidade do produto no pedido']);
+    }
+    exit;
+}
+
+function deletePedido($id) {
+    $conn = getDbConnection();
+    // Remove produtos do pedido primeiro
+    $stmt = $conn->prepare('DELETE FROM pedidos_produtos WHERE pedido_id = ?');
+    $stmt->execute([$id]);
+    // Remove o pedido
+    $stmt = $conn->prepare('DELETE FROM pedidos WHERE id = ?');
+    $ok = $stmt->execute([$id]);
+    if ($ok) {
+        echo json_encode(['success' => true]);
+    } else {
+        http_response_code(500);
+        echo json_encode(['error' => 'Erro ao deletar pedido']);
     }
     exit;
 }
