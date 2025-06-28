@@ -10,9 +10,14 @@ function renderCatalogo() {
         const div = document.createElement('div');
         div.className = 'produto';
         div.innerHTML = `
-            <span><b>${prod.nome}</b> - R$ ${Number(prod.preco).toFixed(2)} (${prod.marca || ''})</span>
-            <input type="number" min="1" value="1" id="qtd_${prod.id}">
-            <button onclick="adicionarCarrinho(${prod.id})">Adicionar</button>
+            <div class="produto-info">
+                <span class="produto-nome">${prod.nome}</span>
+                <span class="produto-preco">R$ ${Number(prod.preco).toFixed(2)}${prod.marca ? ' - ' + prod.marca : ''}</span>
+            </div>
+            <div class="produto-controles">
+                <input type="number" min="1" value="1" id="qtd_${prod.id}">
+                <button onclick="adicionarCarrinho(${prod.id})">Adicionar</button>
+            </div>
         `;
         cat.appendChild(div);
     });
@@ -90,6 +95,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         modalBg.style.display = 'flex';
     };
+
+    // Botão ERP
+    const btnErp = document.getElementById('btn-erp');
+    if (btnErp) {
+        btnErp.onclick = () => {
+            window.location.href = '../public/index.html';
+        };
+    }
 
     fecharModal.onclick = () => modalBg.style.display = 'none';
     modalBg.onclick = e => { if (e.target === modalBg) modalBg.style.display = 'none'; };
