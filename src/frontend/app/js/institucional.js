@@ -27,6 +27,23 @@ let descontoCupom = 0;
 let cupomAplicado = null;
 
 function renderCarrinho() {
+    // Se o cupom aplicado não é mais válido para o carrinho atual, remove
+    if (cupomAplicado) {
+        let vinculado = false;
+        for (const item of carrinho) {
+            const prod = produtos.find(p => p.id === item.produto_id);
+            if (prod && prod.cupons && prod.cupons.some(c => c.codigo.toLowerCase() === cupomAplicado.codigo.toLowerCase())) {
+                vinculado = true;
+                break;
+            }
+        }
+        if (!vinculado) {
+            cupomAplicado = null;
+            descontoCupom = 0;
+            const mensagemCupom = document.getElementById('mensagem-cupom');
+            if (mensagemCupom) mensagemCupom.textContent = '';
+        }
+    }
     const car = document.getElementById('carrinho');
     if (carrinho.length === 0) {
         car.innerHTML = '<i>Carrinho vazio</i>';
@@ -130,20 +147,36 @@ document.addEventListener('DOMContentLoaded', () => {
         mensagemCupom.textContent = '';
         descontoCupom = 0;
         cupomAplicado = null;
-
+    
         if (!codigo) {
             mensagemCupom.textContent = 'Digite um código de cupom.';
             renderCarrinho();
             return;
         }
-
+    
         // Busca cupons no backend
         const resp = await fetch(API + '/cupons/view');
         const data = await resp.json();
         const cupom = (data.cupons || []).find(c => c.codigo.toLowerCase() === codigo.toLowerCase());
-
+    
         if (!cupom) {
             mensagemCupom.textContent = 'Cupom não encontrado.';
+            renderCarrinho();
+            return;
+        }
+    
+        // NOVO: Verifica se o cupom está vinculado a pelo menos um produto do carrinho
+        let vinculado = false;
+        for (const item of carrinho) {
+            // Busca cupons vinculados ao produto
+            const prod = produtos.find(p => p.id === item.produto_id);
+            if (prod && prod.cupons && prod.cupons.some(c => c.codigo.toLowerCase() === codigo.toLowerCase())) {
+                vinculado = true;
+                break;
+            }
+        }
+        if (!vinculado) {
+            mensagemCupom.textContent = 'Cupom não está vinculado a nenhum produto do carrinho.';
             renderCarrinho();
             return;
         }
@@ -206,6 +239,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (resp.ok) {
             mensagem.innerText = 'Pedido realizado com sucesso!';
             carrinho = [];
+            cupomAplicado = null;         // <-- Limpa o cupom aplicado
+            descontoCupom = 0;            // <-- Limpa o desconto do cupom
             renderCarrinho();
             form.reset();
             modalBg.style.display = 'none';
