@@ -4,8 +4,14 @@
 require_once __DIR__ . '/../models/model.produtos.php';
 
 function viewProdutos() {
-    header('Access-Control-Allow-Origin: *'); // <-- Adicione esta linha
-    $produtos = getAllProdutos();
+    header('Access-Control-Allow-Origin: *');
+    // Se a rota for /produtos/view-todos, mostra todos
+    $uri = $_SERVER['REQUEST_URI'];
+    if (strpos($uri, '/produtos/view-todos') === 0) {
+        $produtos = getAllProdutosComEstoqueZero();
+    } else {
+        $produtos = getAllProdutos(true);
+    }
     header('Content-Type: application/json');
     echo json_encode(['produtos' => $produtos]);
     exit;

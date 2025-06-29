@@ -1,5 +1,5 @@
 async function carregarProdutos() {
-    const response = await fetch('http://localhost:8000/produtos/view');
+    const response = await fetch('http://localhost:8000/produtos/view-todos');;
     const data = await response.json();
 
     const tbody = document.getElementById('produtos-tbody');

@@ -22,7 +22,11 @@ function handleProdutosRoutes($uri, $method) {
     // Rotas : GET
     if ($uri === '/produtos/view' && $method === 'GET') {
         viewProdutos();
-        return;
+        exit;
+    }
+    if ($uri === '/produtos/view-todos' && $method === 'GET') {
+        viewProdutos();
+        exit;
     }
     
     // Rotas : POST

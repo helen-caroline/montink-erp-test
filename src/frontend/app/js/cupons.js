@@ -9,18 +9,55 @@ async function carregarCupons() {
             const validadeStr = cupom.validade ? cupom.validade : '<span style="color:#4fc3f7;font-weight:bold;">Vitalício</span>';
             const tr = document.createElement('tr');
             tr.innerHTML = `
+                <td>
+                    <input type="checkbox" class="selecionar-cupom" data-id="${cupom.id}">
+                </td>
                 <td>${cupom.id}</td>
                 <td>${cupom.codigo}</td>
                 <td>R$ ${parseFloat(cupom.desconto).toFixed(2)}</td>
                 <td>${validadeStr}</td>
                 <td>R$ ${parseFloat(cupom.valor_minimo).toFixed(2)}</td>
-                <td>
-                    <button class="btn-deletar" data-id="${cupom.id}" title="Deletar cupom">🗑️</button>
-                </td>
+                <td></td> <!-- Removido o botão 🗑️ -->
             `;
             tbody.appendChild(tr);
         });
 
+        // Seleção de todos
+        const selecionarTodos = document.getElementById('selecionar-todos-cupons');
+        if (selecionarTodos) {
+            selecionarTodos.checked = false;
+            selecionarTodos.onclick = function() {
+                document.querySelectorAll('.selecionar-cupom').forEach(cb => {
+                    cb.checked = selecionarTodos.checked;
+                    const tr = cb.closest('tr');
+                    if (cb.checked) {
+                        tr.classList.add('selected');
+                    } else {
+                        tr.classList.remove('selected');
+                    }
+                });
+            };
+        }
+
+        // Atualiza o checkbox do topo se todos forem marcados/desmarcados individualmente
+        document.querySelectorAll('.selecionar-cupom').forEach(cb => {
+            cb.addEventListener('change', function() {
+                const all = document.querySelectorAll('.selecionar-cupom');
+                const checked = document.querySelectorAll('.selecionar-cupom:checked');
+                if (selecionarTodos) {
+                    selecionarTodos.checked = all.length === checked.length;
+                }
+                // Realce visual da linha selecionada
+                const tr = this.closest('tr');
+                if (this.checked) {
+                    tr.classList.add('selected');
+                } else {
+                    tr.classList.remove('selected');
+                }
+            });
+        });
+
+        // Botão de deletar individual já existe
         document.querySelectorAll('.btn-deletar').forEach(btn => {
             btn.addEventListener('click', async function() {
                 const id = this.getAttribute('data-id');
@@ -40,8 +77,31 @@ async function carregarCupons() {
             });
         });
     } else {
-        tbody.innerHTML = '<tr><td colspan="6">Nenhum cupom cadastrado.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7">Nenhum cupom cadastrado.</td></tr>';
     }
+}
+
+const btnExcluirSelecionados = document.getElementById('btn-excluir-selecionados-cupons');
+if (btnExcluirSelecionados) {
+    btnExcluirSelecionados.addEventListener('click', async function() {
+        const selecionados = Array.from(document.querySelectorAll('.selecionar-cupom:checked'));
+        if (selecionados.length === 0) {
+            alert('Selecione pelo menos um cupom para excluir.');
+            return;
+        }
+        if (!confirm(`Deseja realmente excluir ${selecionados.length} cupom(ns)?`)) return;
+
+        for (const cb of selecionados) {
+            const id = cb.getAttribute('data-id');
+            await fetch('http://localhost:8000/cupons/delete', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+        }
+        carregarCupons();
+        carregarSelectCupons();
+    });
 }
 
 const formCadastrarCupom = document.getElementById('form-cadastrar-cupom');
