@@ -1,239 +1,472 @@
-body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: #181f2a;
-    color: #e3eaf7;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
+/* Cupons - Design profissional */
+.cupons-container {
+  padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: var(--gray-100);
 }
 
-.container {
-    max-width: 900px;
-    margin: 54px auto;
-    background: #232e43;
-    padding: 40px 32px 36px 32px;
-    border-radius: 22px;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+.cupons-header {
+  margin-bottom: 32px;
 }
 
-h1 {
-    color: #4fc3f7;
-    text-align: center;
-    margin-bottom: 32px;
-    letter-spacing: 2px;
+.cupons-container h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 8px;
 }
 
-h2, h3 {
-    color: #fff;
-    margin-bottom: 18px;
+.cupons-subtitle {
+  color: var(--gray-600);
+  font-size: 16px;
+  margin-bottom: 24px;
 }
 
-.tabs {
-    display: flex;
-    margin-bottom: 20px;
+/* Tabs estilo corporativo */
+.cupons-tabs {
+  display: flex;
+  border-bottom: 2px solid var(--gray-200);
+  margin-bottom: 32px;
+  gap: 0;
+}
+
+.cupons-tab-btn {
+  padding: 16px 24px;
+  border: none;
+  background: transparent;
+  color: var(--gray-600);
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  transition: var(--transition);
+  border-bottom: 3px solid transparent;
+  position: relative;
+}
+
+.cupons-tab-btn:hover {
+  color: var(--primary);
+  background-color: var(--gray-100);
+}
+
+.cupons-tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  background-color: var(--white);
+}
+
+.cupons-tab-content {
+  display: none;
+}
+
+.cupons-tab-content.active {
+  display: block;
+}
+
+/* Área de ações */
+.cupons-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--gray-200);
+}
+
+.cupons-actions h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--gray-900);
+}
+
+.cupons-actions-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+/* Botões */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  min-height: 40px;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-danger {
+  background-color: var(--error);
+  color: var(--white);
+}
+
+.btn-danger:hover {
+  background-color: #d32f2f;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.btn-outline:hover {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Tabela */
+.cupons-table-container {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--gray-200);
+}
+
+.cupons-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cupons-table th,
+.cupons-table td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--gray-200);
+  font-size: 14px;
+}
+
+.cupons-table th {
+  background-color: var(--gray-100);
+  color: var(--gray-700);
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cupons-table tbody tr {
+  transition: var(--transition);
+}
+
+.cupons-table tbody tr:hover {
+  background-color: var(--gray-50);
+}
+
+.cupons-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Elementos específicos da tabela */
+.cupom-codigo-table {
+  font-weight: 600;
+  color: var(--primary);
+  background: rgba(25, 118, 210, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+}
+
+.cupom-desconto-table {
+  font-weight: 600;
+  color: var(--success);
+}
+
+.cupom-validade {
+  color: var(--gray-700);
+}
+
+.cupom-vitalicio {
+  color: var(--primary);
+  font-weight: 500;
+  background: rgba(25, 118, 210, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.cupom-status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cupom-status.ativo {
+  background: rgba(76, 175, 80, 0.1);
+  color: var(--success);
+  border: 1px solid var(--success);
+}
+
+.cupom-status.inativo {
+  background: rgba(244, 67, 54, 0.1);
+  color: var(--error);
+  border: 1px solid var(--error);
+}
+
+/* Checkbox */
+.cupons-checkbox {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--gray-300);
+  border-radius: 3px;
+  background: var(--white);
+  cursor: pointer;
+  position: relative;
+  transition: var(--transition);
+}
+
+.cupons-checkbox:checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.cupons-checkbox:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Formulário */
+.cupons-form-container {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 32px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--gray-200);
+}
+
+.cupons-form-container h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-bottom: 8px;
+}
+
+.form-description {
+  color: var(--gray-600);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.cupons-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.cupons-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cupons-field-full {
+  grid-column: 1 / -1;
+}
+
+.cupons-label {
+  font-weight: 600;
+  color: var(--gray-700);
+  font-size: 14px;
+}
+
+.cupons-label.required::after {
+  content: ' *';
+  color: var(--error);
+}
+
+.cupons-input {
+  padding: 12px 16px;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius);
+  font-size: 14px;
+  background: var(--white);
+  color: var(--gray-900);
+  transition: var(--transition);
+  min-height: 44px;
+}
+
+.cupons-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+}
+
+.cupons-input::placeholder {
+  color: var(--gray-500);
+}
+
+.cupons-input:disabled {
+  background-color: var(--gray-100);
+  color: var(--gray-500);
+  cursor: not-allowed;
+}
+
+/* Input com botão */
+.input-with-button {
+  display: flex;
+  gap: 8px;
+}
+
+.input-with-button .cupons-input {
+  flex: 1;
+}
+
+/* Checkbox group */
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.checkbox-group label {
+  margin: 0;
+  color: var(--gray-700);
+  font-weight: 400;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Ações do formulário */
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 24px;
+  border-top: 1px solid var(--gray-200);
+}
+
+/* Mensagens */
+.cupons-message {
+  padding: 16px;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cupons-message-success {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+  border: 1px solid #4caf50;
+}
+
+.cupons-message-error {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #f44336;
+}
+
+/* Estado vazio */
+.cupons-empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--gray-500);
+}
+
+.cupons-empty h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: var(--gray-600);
+}
+
+.cupons-empty p {
+  font-size: 14px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .cupons-container {
+    padding: 20px;
+  }
+  
+  .cupons-tabs {
+    overflow-x: auto;
+  }
+  
+  .cupons-tab-btn {
+    white-space: nowrap;
+    min-width: 120px;
+  }
+  
+  .cupons-actions {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .cupons-actions-buttons {
     justify-content: center;
+  }
+  
+  .cupons-form {
+    grid-template-columns: 1fr;
+  }
+  
+  .cupons-table-container {
+    overflow-x: auto;
+  }
+  
+  .cupons-table {
+    min-width: 600px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .input-with-button {
+    flex-direction: column;
+  }
 }
 
-.tab-btn {
-    padding: 12px 28px;
-    border: none;
-    background: #26334d;
-    color: #4fc3f7;
-    cursor: pointer;
-    margin-right: 5px;
-    border-radius: 12px 12px 0 0;
-    font-weight: 700;
-    font-size: 1rem;
-    transition: background 0.2s, color 0.2s;
-    outline: none;
-}
-
-.tab-btn.active {
-    background: #181f2a;
-    color: #fff;
-    border-bottom: 2px solid #4fc3f7;
-}
-
-.tab-content {
-    display: none;
-    animation: fadeIn 0.5s;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-form {
-    margin-bottom: 20px;
-    background: #26334d;
-    padding: 24px 18px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(31, 38, 135, 0.10);
-}
-
-.campo {
-    margin-bottom: 18px;
-    display: flex;
-    align-items: center;
-}
-
-.campo label {
-    width: 160px;
-    color: #4fc3f7;
-    font-weight: 500;
-}
-
-input[type="text"],
-input[type="number"],
-input[type="date"],
-select {
-    flex: 1;
-    padding: 8px 12px;
-    border: 1px solid #4fc3f7;
-    border-radius: 6px;
-    background: #181f2a;
-    color: #fff;
-    font-size: 1rem;
-    margin-left: 10px;
-    transition: border 0.2s;
-}
-
-input[type="text"]:focus,
-input[type="number"]:focus,
-input[type="date"]:focus,
-select:focus {
-    border: 1.5px solid #fff;
-    outline: none;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-}
-input[type="date"]::-webkit-input-placeholder { color: #fff; }
-input[type="date"]::-moz-placeholder { color: #fff; }
-input[type="date"]:-ms-input-placeholder { color: #fff; }
-input[type="date"]::placeholder { color: #fff; }
-
-input[type="checkbox"] {
-    accent-color: #4fc3f7;
-    margin-left: 0;
-}
-
-.btn-salvar, .btn-deletar {
-    background: linear-gradient(90deg, #4fc3f7 0%, #1976d2 100%);
-    color: #fff;
-    border: none;
-    padding: 10px 22px;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 1rem;
-    margin-top: 10px;
-    margin-right: 8px;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(31, 38, 135, 0.10);
-    transition: background 0.2s, transform 0.1s;
-}
-
-.btn-salvar:hover, .btn-deletar:hover {
-    background: linear-gradient(90deg, #1976d2 0%, #4fc3f7 100%);
-    transform: translateY(-2px) scale(1.03);
-}
-
-.btn-deletar {
-    background: linear-gradient(90deg, #f44336 0%, #ff9800 100%);
-}
-
-.btn-deletar:hover {
-    background: linear-gradient(90deg, #ff9800 0%, #f44336 100%);
-}
-
-table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-bottom: 30px;
-    background: #181f2a;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(31, 38, 135, 0.10);
-}
-
-th, td {
-    border: 1px solid #26334d;
-    padding: 12px 8px;
-    text-align: center;
-    color: #fff;
-    font-size: 1rem;
-}
-
-th {
-    background: #26334d;
-    color: #4fc3f7;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-tr:nth-child(even) {
-    background: #232e43;
-}
-
-#mensagem-cadastro, #mensagem-vinculo {
-    margin-left: 18px;
-    font-weight: bold;
-    font-size: 1rem;
-}
-
-@media (max-width: 700px) {
-    .container {
-        padding: 10px 2vw;
-    }
-    table, thead, tbody, th, td, tr {
-        display: block;
-    }
-    th, td {
-        padding: 10px 4px;
-    }
-    .campo label {
-        width: 110px;
-    }
-}
-
-.form-vincular .vincular-row {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    justify-content: flex-end;
-    margin-bottom: 8px;
-}
-.form-vincular select {
-    min-width: 180px;
-}
-.form-vincular .btn-salvar {
-    margin-top: 0;
-    margin-right: 0;
-}
-
-/* Badge para cupons vinculados */
-.cupom-list-item {
-    display: inline-block;
-    background: #26334d;
-    color: #4fc3f7;
-    border-radius: 16px;
-    padding: 3px 12px;
-    margin: 2px 2px 2px 0;
-    font-size: 0.97em;
-    font-weight: 600;
-    letter-spacing: 1px;
-    border: 1px solid #4fc3f7;
-    transition: background 0.2s, color 0.2s;
-}
-
-.cupom-list-item:hover {
-    background: #4fc3f7;
-    color: #181f2a;
-    cursor: pointer;
+@media (max-width: 480px) {
+  .cupons-container h1 {
+    font-size: 24px;
+  }
+  
+  .cupons-form-container {
+    padding: 20px;
+  }
+  
+  .btn {
+    font-size: 13px;
+    padding: 8px 16px;
+  }
 }

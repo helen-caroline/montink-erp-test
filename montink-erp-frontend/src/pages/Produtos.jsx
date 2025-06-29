@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../css/estoque.css';
 
-const Estoque = () => {
+const Produtos = () => {
     const [activeTab, setActiveTab] = useState('lista');
     const [produtos, setProdutos] = useState([]);
     const [variacoes, setVariacoes] = useState([{ nome: '', valor: '' }]);
@@ -15,6 +15,7 @@ const Estoque = () => {
     });
     const [mensagemCadastro, setMensagemCadastro] = useState({ text: '', color: '' });
     const [selecionarTodos, setSelecionarTodos] = useState(false);
+    const [produtosSelecionados, setProdutosSelecionados] = useState(new Set());
 
     useEffect(() => {
         carregarProdutos();
@@ -25,6 +26,8 @@ const Estoque = () => {
             const response = await fetch('http://localhost:8000/produtos/view-todos');
             const data = await response.json();
             setProdutos(data.produtos || []);
+            setProdutosSelecionados(new Set());
+            setSelecionarTodos(false);
         } catch (error) {
             console.error('Erro ao carregar produtos:', error);
         }
@@ -32,6 +35,7 @@ const Estoque = () => {
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
+        setMensagemCadastro({ text: '', color: '' });
     };
 
     const handleInputChange = (e) => {
@@ -44,9 +48,11 @@ const Estoque = () => {
     };
 
     const removerVariacao = (index) => {
-        const novasVariacoes = [...variacoes];
-        novasVariacoes.splice(index, 1);
-        setVariacoes(novasVariacoes);
+        if (variacoes.length > 1) {
+            const novasVariacoes = [...variacoes];
+            novasVariacoes.splice(index, 1);
+            setVariacoes(novasVariacoes);
+        }
     };
 
     const handleVariacaoChange = (index, field, value) => {
@@ -68,7 +74,7 @@ const Estoque = () => {
             });
 
             if (response.ok) {
-                setMensagemCadastro({ text: 'Produto cadastrado com sucesso!', color: 'green' });
+                setMensagemCadastro({ text: 'Produto cadastrado com sucesso!', color: 'success' });
                 setFormData({
                     nome: '',
                     preco: '',
@@ -79,18 +85,42 @@ const Estoque = () => {
                 });
                 setVariacoes([{ nome: '', valor: '' }]);
                 carregarProdutos();
+                
+                setTimeout(() => {
+                    setMensagemCadastro({ text: '', color: '' });
+                }, 3000);
             } else {
-                setMensagemCadastro({ text: 'Erro ao cadastrar produto.', color: 'red' });
+                setMensagemCadastro({ text: 'Erro ao cadastrar produto.', color: 'error' });
             }
         } catch (error) {
             console.error('Erro ao cadastrar produto:', error);
-            setMensagemCadastro({ text: 'Erro ao cadastrar produto.', color: 'red' });
+            setMensagemCadastro({ text: 'Erro ao cadastrar produto.', color: 'error' });
         }
     };
 
     const handleSelecionarTodos = (e) => {
         const isChecked = e.target.checked;
         setSelecionarTodos(isChecked);
+        
+        if (isChecked) {
+            const todosProdutos = new Set(produtos.map(p => p.id));
+            setProdutosSelecionados(todosProdutos);
+        } else {
+            setProdutosSelecionados(new Set());
+        }
+    };
+
+    const handleSelecionarProduto = (produtoId) => {
+        const novosSelecionados = new Set(produtosSelecionados);
+        
+        if (novosSelecionados.has(produtoId)) {
+            novosSelecionados.delete(produtoId);
+        } else {
+            novosSelecionados.add(produtoId);
+        }
+        
+        setProdutosSelecionados(novosSelecionados);
+        setSelecionarTodos(novosSelecionados.size === produtos.length && produtos.length > 0);
     };
 
     const handleDeletarVariacao = async (id) => {
@@ -132,16 +162,15 @@ const Estoque = () => {
     };
 
     const handleExcluirSelecionados = async () => {
-        const selecionados = document.querySelectorAll('.selecionar-produto:checked');
-        if (selecionados.length === 0) {
+        if (produtosSelecionados.size === 0) {
             alert('Selecione pelo menos um produto para excluir.');
             return;
         }
-        if (!window.confirm(`Deseja realmente excluir ${selecionados.length} produto(s)?`)) return;
+        
+        if (!window.confirm(`Deseja realmente excluir ${produtosSelecionados.size} produto(s)?`)) return;
 
         try {
-            for (const cb of selecionados) {
-                const id = cb.getAttribute('data-id');
+            for (const id of produtosSelecionados) {
                 await fetch('http://localhost:8000/produtos/delete', {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' },
@@ -149,252 +178,343 @@ const Estoque = () => {
                 });
             }
             carregarProdutos();
-            setSelecionarTodos(false);
         } catch (error) {
             console.error('Erro ao excluir produtos:', error);
         }
     };
 
     return (
-        <div className="container">
-            <h1>Produtos</h1>
-            <div className="tabs">
+        <div className="produtos-container">
+            <div className="produtos-header">
+                <h1>Gerenciamento de Produtos</h1>
+                <p className="produtos-subtitle">
+                    Gerencie seu estoque, cadastre novos produtos e mantenha seu inventário atualizado
+                </p>
+            </div>
+            
+            <div className="produtos-tabs">
                 <button 
-                    className={`tab-btn ${activeTab === 'lista' ? 'active' : ''}`} 
+                    className={`produtos-tab-btn ${activeTab === 'lista' ? 'active' : ''}`} 
                     onClick={() => handleTabChange('lista')}
-                    data-tab="lista"
                 >
                     Lista de Produtos
                 </button>
                 <button 
-                    className={`tab-btn ${activeTab === 'cadastro' ? 'active' : ''}`} 
+                    className={`produtos-tab-btn ${activeTab === 'cadastro' ? 'active' : ''}`} 
                     onClick={() => handleTabChange('cadastro')}
-                    data-tab="cadastro"
                 >
                     Cadastrar Produto
                 </button>
             </div>
             
             {activeTab === 'lista' && (
-                <div id="tab-lista" className="tab-content active">
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
-                        <button 
-                            id="btn-excluir-selecionados" 
-                            className="btn-deletar" 
-                            style={{ marginBottom: '0' }}
-                            onClick={handleExcluirSelecionados}
-                        >
-                            Excluir Selecionados
-                        </button>
+                <div className="produtos-tab-content active">
+                    <div className="produtos-actions">
+                        <h3>Lista de Produtos ({produtos.length})</h3>
+                        <div className="produtos-actions-buttons">
+                            <button 
+                                className="btn btn-primary"
+                                onClick={() => carregarProdutos()}
+                            >
+                                Atualizar
+                            </button>
+                            <button 
+                                className="btn btn-danger"
+                                onClick={handleExcluirSelecionados}
+                                disabled={produtosSelecionados.size === 0}
+                            >
+                                Excluir Selecionados ({produtosSelecionados.size})
+                            </button>
+                        </div>
                     </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>
-                                    <input 
-                                        type="checkbox" 
-                                        id="selecionar-todos" 
-                                        title="Selecionar todos"
-                                        checked={selecionarTodos}
-                                        onChange={handleSelecionarTodos}
-                                    />
-                                </th>
-                                <th>ID</th>
-                                <th>Nome</th>
-                                <th>Preço</th>
-                                <th>Estoque</th>
-                                <th>Variações</th>
-                                <th>Cupons</th>
-                            </tr>
-                        </thead>
-                        <tbody id="produtos-tbody">
-                            {produtos.length > 0 ? (
-                                produtos.map(produto => (
-                                    <tr key={produto.id}>
-                                        <td>
-                                            <input 
-                                                type="checkbox" 
-                                                className="selecionar-produto" 
-                                                data-id={produto.id}
-                                            />
-                                        </td>
-                                        <td>{produto.id}</td>
-                                        <td>{produto.nome}</td>
-                                        <td>R$ {parseFloat(produto.preco).toFixed(2)}</td>
-                                        <td>{produto.estoque}</td>
-                                        <td>
-                                            {produto.variacoes && produto.variacoes.length > 0 ? (
-                                                produto.variacoes.map(v => (
-                                                    <div key={v.id} className="variacao-list-item">
-                                                        <span className="variacao-nome-valor">{v.nome}: {v.valor}</span>
-                                                        <button 
-                                                            className="btn-deletar-variacao" 
-                                                            data-id={v.id} 
-                                                            title="Deletar variação"
-                                                            onClick={() => handleDeletarVariacao(v.id)}
-                                                        >
-                                                            🗑️
-                                                        </button>
+                    
+                    <div className="produtos-table-container">
+                        <table className="produtos-table">
+                            <thead>
+                                <tr>
+                                    <th style={{ width: '50px' }}>
+                                        <input 
+                                            type="checkbox" 
+                                            className="produtos-checkbox"
+                                            checked={selecionarTodos}
+                                            onChange={handleSelecionarTodos}
+                                        />
+                                    </th>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Preço</th>
+                                    <th>Estoque</th>
+                                    <th>Variações</th>
+                                    <th>Cupons</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {produtos.length > 0 ? (
+                                    produtos.map(produto => (
+                                        <tr key={produto.id}>
+                                            <td>
+                                                <input 
+                                                    type="checkbox" 
+                                                    className="produtos-checkbox"
+                                                    checked={produtosSelecionados.has(produto.id)}
+                                                    onChange={() => handleSelecionarProduto(produto.id)}
+                                                />
+                                            </td>
+                                            <td>#{produto.id}</td>
+                                            <td style={{ fontWeight: '500' }}>{produto.nome}</td>
+                                            <td>R$ {parseFloat(produto.preco).toFixed(2)}</td>
+                                            <td>
+                                                <span style={{ 
+                                                    padding: '4px 8px', 
+                                                    borderRadius: '4px', 
+                                                    backgroundColor: produto.estoque > 10 ? '#e8f5e8' : '#ffebee',
+                                                    color: produto.estoque > 10 ? '#2e7d32' : '#c62828',
+                                                    fontSize: '12px',
+                                                    fontWeight: '500'
+                                                }}>
+                                                    {produto.estoque} un.
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {produto.variacoes && produto.variacoes.length > 0 ? (
+                                                    <div className="produtos-items-list">
+                                                        {produto.variacoes.map(v => (
+                                                            <div key={v.id} className="produtos-item">
+                                                                <span className="produtos-item-content">
+                                                                    <strong>{v.nome}:</strong> {v.valor}
+                                                                </span>
+                                                                <button 
+                                                                    className="produtos-delete-btn" 
+                                                                    onClick={() => handleDeletarVariacao(v.id)}
+                                                                    title="Deletar variação"
+                                                                >
+                                                                    ×
+                                                                </button>
+                                                            </div>
+                                                        ))}
                                                     </div>
-                                                ))
-                                            ) : '-'}
-                                        </td>
-                                        <td>
-                                            {produto.cupons && produto.cupons.length > 0 ? (
-                                                produto.cupons.map(c => (
-                                                    <div key={c.id} className="cupom-list-item">
-                                                        <span 
-                                                            className="cupom-nome-valor" 
-                                                            title={`Desconto: R$ ${parseFloat(c.desconto).toFixed(2)}`}
-                                                        >
-                                                            [{c.id}] {c.codigo}
-                                                        </span>
-                                                        <button 
-                                                            className="btn-deletar-cupom-produto" 
-                                                            data-cupom-id={c.id} 
-                                                            data-produto-id={produto.id}
-                                                            title="Desvincular cupom"
-                                                            onClick={() => handleDesvincularCupom(c.id, produto.id)}
-                                                        >
-                                                            🗑️
-                                                        </button>
+                                                ) : (
+                                                    <span style={{ color: 'var(--gray-500)', fontSize: '13px' }}>
+                                                        Nenhuma variação
+                                                    </span>
+                                                )}
+                                            </td>
+                                            <td>
+                                                {produto.cupons && produto.cupons.length > 0 ? (
+                                                    <div className="produtos-items-list">
+                                                        {produto.cupons.map(c => (
+                                                            <div key={c.id} className="produtos-item">
+                                                                <span className="produtos-item-content">
+                                                                    <strong>{c.codigo}</strong> (R$ {parseFloat(c.desconto).toFixed(2)})
+                                                                </span>
+                                                                <button 
+                                                                    className="produtos-delete-btn" 
+                                                                    onClick={() => handleDesvincularCupom(c.id, produto.id)}
+                                                                    title="Desvincular cupom"
+                                                                >
+                                                                    ×
+                                                                </button>
+                                                            </div>
+                                                        ))}
                                                     </div>
-                                                ))
-                                            ) : '-'}
+                                                ) : (
+                                                    <span style={{ color: 'var(--gray-500)', fontSize: '13px' }}>
+                                                        Nenhum cupom
+                                                    </span>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="7">
+                                            <div className="produtos-empty">
+                                                <h3>Nenhum produto encontrado</h3>
+                                                <p>Comece cadastrando seu primeiro produto na aba "Cadastrar Produto"</p>
+                                            </div>
                                         </td>
                                     </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan="7">Nenhum produto encontrado.</td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             )}
             
             {activeTab === 'cadastro' && (
-                <div id="tab-cadastro" className="tab-content">
-                    <h3>Cadastrar Produto</h3>
-                    {mensagemCadastro.text && (
-                        <div id="mensagem-cadastro" style={{ color: mensagemCadastro.color }}>
-                            {mensagemCadastro.text}
-                        </div>
-                    )}
-                    <form id="form-cadastrar-produto" onSubmit={handleSubmit}>
-                        <div className="campo">
-                            <label htmlFor="nome">Nome do Produto</label>
-                            <input 
-                                type="text" 
-                                id="nome" 
-                                name="nome" 
-                                value={formData.nome}
-                                onChange={handleInputChange}
-                                required 
-                            />
-                        </div>
-                        <div className="campo">
-                            <label htmlFor="preco">Preço (R$)</label>
-                            <input 
-                                type="number" 
-                                id="preco" 
-                                name="preco" 
-                                value={formData.preco}
-                                onChange={handleInputChange}
-                                step="0.01" 
-                                min="0" 
-                                required 
-                            />
-                        </div>
-                        <div className="campo">
-                            <label htmlFor="estoque">Estoque</label>
-                            <input 
-                                type="number" 
-                                id="estoque" 
-                                name="estoque" 
-                                value={formData.estoque}
-                                onChange={handleInputChange}
-                                min="0" 
-                                required 
-                            />
-                        </div>
-                        <div className="campo">
-                            <label htmlFor="cor">Cor</label>
-                            <input 
-                                type="text" 
-                                id="cor" 
-                                name="cor" 
-                                value={formData.cor}
-                                onChange={handleInputChange}
-                                placeholder="(ex: Azul)" 
-                            />
-                        </div>
-                        <div className="campo">
-                            <label htmlFor="modelo">Modelo</label>
-                            <input 
-                                type="text" 
-                                id="modelo" 
-                                name="modelo" 
-                                value={formData.modelo}
-                                onChange={handleInputChange}
-                                placeholder="(ex: Slim)" 
-                            />
-                        </div>
-                        <div className="campo">
-                            <label htmlFor="marca">Marca</label>
-                            <input 
-                                type="text" 
-                                id="marca" 
-                                name="marca" 
-                                value={formData.marca}
-                                onChange={handleInputChange}
-                                placeholder="(ex: Montink)" 
-                            />
-                        </div>
-                        <div className="campo">
-                            <label>Variações Personalizadas:</label>
-                            <div id="variacoes-container">
-                                {variacoes.map((variacao, index) => (
-                                    <div key={index} className="variacao-row">
-                                        <input 
-                                            type="text" 
-                                            className="variacao-nome" 
-                                            placeholder="Nome da variação (ex: Personalizado)"
-                                            value={variacao.nome}
-                                            onChange={(e) => handleVariacaoChange(index, 'nome', e.target.value)}
-                                        />
-                                        <input 
-                                            type="text" 
-                                            className="variacao-valor" 
-                                            placeholder="Valor (ex: Nome do cliente)"
-                                            value={variacao.valor}
-                                            onChange={(e) => handleVariacaoChange(index, 'valor', e.target.value)}
-                                        />
-                                        <button 
-                                            type="button" 
-                                            className="remover-variacao"
-                                            onClick={() => removerVariacao(index)}
-                                        >
-                                            Remover
-                                        </button>
-                                    </div>
-                                ))}
+                <div className="produtos-tab-content active">
+                    <div className="produtos-form-container">
+                        <h3 style={{ marginBottom: '24px', fontSize: '20px', fontWeight: '600' }}>
+                            Cadastrar Novo Produto
+                        </h3>
+                        
+                        {mensagemCadastro.text && (
+                            <div className={`produtos-message produtos-message-${mensagemCadastro.color}`}>
+                                {mensagemCadastro.text}
                             </div>
-                            <button 
-                                type="button" 
-                                id="adicionar-variacao"
-                                onClick={adicionarVariacao}
-                            >
-                                Adicionar Variação
-                            </button>
-                        </div>
-                        <button type="submit" className="btn-salvar">Cadastrar</button>
-                    </form>
+                        )}
+                        
+                        <form onSubmit={handleSubmit}>
+                            <div className="produtos-form">
+                                <div className="produtos-field">
+                                    <label htmlFor="nome" className="produtos-label required">Nome do Produto</label>
+                                    <input 
+                                        type="text" 
+                                        id="nome" 
+                                        name="nome" 
+                                        className="produtos-input"
+                                        value={formData.nome}
+                                        onChange={handleInputChange}
+                                        placeholder="Digite o nome do produto"
+                                        required 
+                                    />
+                                </div>
+                                
+                                <div className="produtos-field">
+                                    <label htmlFor="preco" className="produtos-label required">Preço (R$)</label>
+                                    <input 
+                                        type="number" 
+                                        id="preco" 
+                                        name="preco" 
+                                        className="produtos-input"
+                                        value={formData.preco}
+                                        onChange={handleInputChange}
+                                        placeholder="0,00"
+                                        step="0.01" 
+                                        min="0" 
+                                        required 
+                                    />
+                                </div>
+                                
+                                <div className="produtos-field">
+                                    <label htmlFor="estoque" className="produtos-label required">Estoque</label>
+                                    <input 
+                                        type="number" 
+                                        id="estoque" 
+                                        name="estoque" 
+                                        className="produtos-input"
+                                        value={formData.estoque}
+                                        onChange={handleInputChange}
+                                        placeholder="Quantidade disponível"
+                                        min="0" 
+                                        required 
+                                    />
+                                </div>
+                                
+                                <div className="produtos-field">
+                                    <label htmlFor="cor" className="produtos-label">Cor</label>
+                                    <input 
+                                        type="text" 
+                                        id="cor" 
+                                        name="cor" 
+                                        className="produtos-input"
+                                        value={formData.cor}
+                                        onChange={handleInputChange}
+                                        placeholder="Ex: Azul, Vermelho, Preto"
+                                    />
+                                </div>
+                                
+                                <div className="produtos-field">
+                                    <label htmlFor="modelo" className="produtos-label">Modelo</label>
+                                    <input 
+                                        type="text" 
+                                        id="modelo" 
+                                        name="modelo" 
+                                        className="produtos-input"
+                                        value={formData.modelo}
+                                        onChange={handleInputChange}
+                                        placeholder="Ex: Slim, Regular, Plus"
+                                    />
+                                </div>
+                                
+                                <div className="produtos-field">
+                                    <label htmlFor="marca" className="produtos-label">Marca</label>
+                                    <input 
+                                        type="text" 
+                                        id="marca" 
+                                        name="marca" 
+                                        className="produtos-input"
+                                        value={formData.marca}
+                                        onChange={handleInputChange}
+                                        placeholder="Ex: Nike, Adidas, Puma"
+                                    />
+                                </div>
+                                
+                                <div className="produtos-variations-container">
+                                    <label className="produtos-label">Variações do Produto (Opcional)</label>
+                                    <div className="produtos-variations">
+                                        {variacoes.map((variacao, index) => (
+                                            <div key={index} className="produtos-variation-row">
+                                                <div className="produtos-field">
+                                                    <input 
+                                                        type="text" 
+                                                        className="produtos-input"
+                                                        placeholder="Nome da variação (ex: Tamanho)"
+                                                        value={variacao.nome}
+                                                        onChange={(e) => handleVariacaoChange(index, 'nome', e.target.value)}
+                                                    />
+                                                </div>
+                                                <div className="produtos-field">
+                                                    <input 
+                                                        type="text" 
+                                                        className="produtos-input"
+                                                        placeholder="Valor (ex: G, M, P)"
+                                                        value={variacao.valor}
+                                                        onChange={(e) => handleVariacaoChange(index, 'valor', e.target.value)}
+                                                    />
+                                                </div>
+                                                {variacoes.length > 1 && (
+                                                    <button 
+                                                        type="button" 
+                                                        className="produtos-remove-btn"
+                                                        onClick={() => removerVariacao(index)}
+                                                    >
+                                                        Remover
+                                                    </button>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <button 
+                                        type="button" 
+                                        className="btn btn-outline"
+                                        onClick={adicionarVariacao}
+                                        style={{ marginTop: '16px' }}
+                                    >
+                                        + Adicionar Variação
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div style={{ marginTop: '32px', display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+                                <button 
+                                    type="button" 
+                                    className="btn btn-outline"
+                                    onClick={() => {
+                                        setFormData({
+                                            nome: '',
+                                            preco: '',
+                                            estoque: '',
+                                            cor: '',
+                                            modelo: '',
+                                            marca: ''
+                                        });
+                                        setVariacoes([{ nome: '', valor: '' }]);
+                                        setMensagemCadastro({ text: '', color: '' });
+                                    }}
+                                >
+                                    Limpar Formulário
+                                </button>
+                                <button type="submit" className="btn btn-primary">
+                                    Cadastrar Produto
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             )}
         </div>
     );
 };
 
-export default Estoque;
+export default Produtos;
