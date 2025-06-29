@@ -28,9 +28,15 @@
                 <span id="mensagem-vinculo"></span>
             </form>
             <h3>Cupons cadastrados</h3>
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+                <button id="btn-excluir-selecionados-cupons" class="btn-deletar" style="margin-bottom:0;">Excluir Selecionados</button>
+            </div>
             <table>
                 <thead>
                     <tr>
+                        <th>
+                            <input type="checkbox" id="selecionar-todos-cupons" title="Selecionar todos">
+                        </th>
                         <th>ID</th>
                         <th>Código</th>
                         <th>Desconto</th>

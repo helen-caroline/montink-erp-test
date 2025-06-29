@@ -1,17 +1,21 @@
 <?php
 require_once __DIR__ . '/../db.php';
 
-function getAllProdutos() {
+function getAllProdutos($apenasDisponiveis = true) {
     $conn = getDbConnection();
     try {
-        $stmt = $conn->query('SELECT * FROM produtos');
+        $sql = 'SELECT * FROM produtos';
+        if ($apenasDisponiveis) {
+            $sql .= ' WHERE estoque > 0';
+        }
+        $stmt = $conn->query($sql);
         $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($produtos as &$produto) {
             $stmtVar = $conn->prepare('SELECT v.id, v.nome, v.valor FROM variacoes v WHERE v.produto_id = ?');
             $stmtVar->execute([$produto['id']]);
             $produto['variacoes'] = $stmtVar->fetchAll(PDO::FETCH_ASSOC);
-        
+
             // Buscar cupons vinculados
             $produto['cupons'] = getCuponsByProdutoId($produto['id']);
         }
@@ -20,6 +24,11 @@ function getAllProdutos() {
     } catch (PDOException $e) {
         return [];
     }
+}
+
+// Nova função para buscar todos, inclusive estoque 0
+function getAllProdutosComEstoqueZero() {
+    return getAllProdutos(false);
 }
 
 function getCuponsByProdutoId($produto_id) {

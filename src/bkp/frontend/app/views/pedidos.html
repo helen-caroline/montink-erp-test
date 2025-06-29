@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Pedidos</title>
+    <link rel="stylesheet" href="../css/pedidos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header-pedidos">
+            <h1><i class="fa-solid fa-box-open"></i> Pedidos</h1>
+            <button id="btn-excluir-selecionados-pedidos" class="btn-deletar">
+                <i class="fa-solid fa-trash"></i> Excluir Selecionados
+            </button>
+        </div>
+        <div class="tabela-wrapper">
+            <table id="tabela-pedidos">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="selecionar-todos-pedidos" title="Selecionar todos">
+                        </th>
+                        <th>ID</th>
+                        <th><i class="fa-solid fa-user"></i> Cliente</th>
+                        <th><i class="fa-solid fa-clipboard-check"></i> Status</th>
+                        <th><i class="fa-solid fa-money-bill-wave"></i> Total</th>
+                        <th><i class="fa-solid fa-calendar-day"></i> Data</th>
+                        <th><i class="fa-solid fa-gear"></i> Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Linhas dos pedidos via JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal Detalhes do Pedido -->
+    <div class="modal-bg" id="modal-bg">
+        <div class="modal" id="modal-pedido">
+            <span class="modal-close" id="fechar-modal">&times;</span>
+            <h2><i class="fa-solid fa-receipt"></i> Detalhes do Pedido</h2>
+            <div id="detalhes-pedido">
+                <!-- Detalhes via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/pedidos.js"></script>
+</body>
+</html>
