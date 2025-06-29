@@ -1,0 +1,20 @@
+.produtos-submenu {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 28px;
+}
+.produtos-submenu button {
+    background: none;
+    border: none;
+    color: #4fc3f7;
+    font-size: 1.15rem;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 10px 18px;
+    border-radius: 8px 8px 0 0;
+    transition: background 0.2s, color 0.2s;
+}
+.produtos-submenu button.active {
+    background: #26334d;
+    color: #fff;
+}
