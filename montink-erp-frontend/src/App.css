@@ -100,43 +100,43 @@
   z-index: 2;
 }
 
-/* Features Section */
+/* Features Section - Versão compacta */
 .dashboard-features {
-  margin-top: var(--space-3xl);
+  margin-top: var(--space-2xl); /* Reduzido de 3xl para 2xl */
   background: var(--white);
   border-radius: var(--radius-xl);
-  padding: var(--space-3xl);
+  padding: var(--space-2xl); /* Reduzido de 3xl para 2xl */
   box-shadow: var(--shadow);
   border: 1px solid var(--gray-200);
 }
 
 .features-header {
   text-align: center;
-  margin-bottom: var(--space-2xl);
+  margin-bottom: var(--space-lg); /* Reduzido de 2xl para lg */
 }
 
 .features-header h2 {
-  font-size: 28px;
+  font-size: 24px; /* Reduzido de 28px para 24px */
   font-weight: 700;
   color: var(--gray-900);
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-xs); /* Reduzido de sm para xs */
   letter-spacing: -0.02em;
 }
 
 .features-header p {
   color: var(--gray-600);
-  font-size: 16px;
+  font-size: 14px; /* Reduzido de 16px para 14px */
 }
 
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: var(--space-xl);
+  grid-template-columns: repeat(4, 1fr); /* Forçar 4 colunas */
+  gap: var(--space-lg); /* Reduzido de xl para lg */
 }
 
 .feature-item {
   text-align: center;
-  padding: var(--space-lg);
+  padding: var(--space-md); /* Reduzido de lg para md */
   border-radius: var(--radius-md);
   transition: var(--transition);
 }
@@ -147,13 +147,13 @@
 }
 
 .feature-icon {
-  font-size: 32px;
-  margin-bottom: var(--space-md);
+  font-size: 28px; /* Reduzido de 32px para 28px */
+  margin-bottom: var(--space-sm); /* Reduzido de md para sm */
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .feature-item h4 {
-  font-size: 16px;
+  font-size: 15px; /* Reduzido de 16px para 15px */
   font-weight: 600;
   color: var(--gray-900);
   margin-bottom: var(--space-xs);
@@ -161,8 +161,75 @@
 
 .feature-item p {
   color: var(--gray-600);
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 13px; /* Reduzido de 14px para 13px */
+  line-height: 1.4; /* Reduzido de 1.5 para 1.4 */
+}
+
+/* Responsividade atualizada */
+@media (max-width: 768px) {
+  .dashboard-header h1 {
+    font-size: 32px;
+  }
+  
+  .stat-overview {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+  
+  .stat-item {
+    padding: var(--space-lg);
+  }
+  
+  .dashboard-features {
+    padding: var(--space-lg); /* Reduzido */
+  }
+  
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas no mobile */
+    gap: var(--space-md);
+  }
+  
+  .sidebar-footer {
+    padding: var(--space-md);
+  }
+  
+  .user-info {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header h1 {
+    font-size: 28px;
+  }
+  
+  .features-header h2 {
+    font-size: 20px; /* Ajustado */
+  }
+  
+  .atalhos .card {
+    padding: var(--space-xl);
+  }
+  
+  .card-description {
+    font-size: 13px;
+  }
+  
+  .dashboard-features {
+    padding: var(--space-md); /* Reduzido */
+    margin-top: var(--space-lg); /* Reduzido */
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr; /* Uma coluna em telas muito pequenas */
+    gap: var(--space-sm);
+  }
+  
+  .feature-item {
+    padding: var(--space-sm); /* Menor padding */
+  }
 }
 
 /* Sidebar melhorada */

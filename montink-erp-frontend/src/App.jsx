@@ -17,7 +17,7 @@ function Home() {
         </p>
       </div>
       
-      <div className="dashboard-stats">
+      {/* <div className="dashboard-stats">
         <div className="stat-overview">
           <div className="stat-item">
             <div className="stat-icon primary">📊</div>
@@ -41,7 +41,7 @@ function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       
       <div className="atalhos">
         <Link to="/pedidos" className="card">
