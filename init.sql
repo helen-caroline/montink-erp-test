@@ -21,7 +21,8 @@ CREATE TABLE cupons (
     codigo VARCHAR(50),
     desconto DECIMAL(10,2),
     validade DATE,
-    valor_minimo DECIMAL(10,2)
+    valor_minimo DECIMAL(10,2),
+    ativo TINYINT(1) DEFAULT 1
 );
 
 CREATE TABLE pedidos (

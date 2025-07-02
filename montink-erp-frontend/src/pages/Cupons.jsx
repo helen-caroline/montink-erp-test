@@ -162,6 +162,50 @@ const Cupons = () => {
     }
   };
 
+  const toggleStatusCupom = async (cupomId) => {
+    try {
+      const response = await fetch(API + '/cupons/toggle-status', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: cupomId })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Atualizar o cupom localmente
+        setCupons(prev => prev.map(cupom => 
+          cupom.id === cupomId 
+            ? { ...cupom, ativo: data.ativo ? 1 : 0 }
+            : cupom
+        ));
+        
+        // Mostrar mensagem de sucesso
+        const status = data.ativo ? 'ativado' : 'desativado';
+        setMensagemCadastro({ 
+          text: `✅ Cupom ${status} com sucesso!`, 
+          color: 'success' 
+        });
+        
+        // Remover mensagem após 3 segundos
+        setTimeout(() => {
+          setMensagemCadastro({ text: '', color: '' });
+        }, 3000);
+      } else {
+        setMensagemCadastro({ 
+          text: '❌ Erro ao alterar status do cupom', 
+          color: 'error' 
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao alterar status do cupom:', error);
+      setMensagemCadastro({ 
+        text: '❌ Erro de conexão ao alterar status', 
+        color: 'error' 
+      });
+    }
+  };
+
   return (
     <div className="cupons-container">
       <div className="cupons-header">
@@ -231,49 +275,72 @@ const Cupons = () => {
                   <th>Validade</th>
                   <th>Valor Mínimo</th>
                   <th>Status</th>
+                  <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
                 {cupons.length > 0 ? (
-                  cupons.map(cupom => (
-                    <tr key={cupom.id}>
-                      <td>
-                        <input 
-                          type="checkbox" 
-                          className="cupons-checkbox"
-                          checked={selecionados.includes(cupom.id)}
-                          onChange={() => handleSelecionarCupom(cupom.id)}
-                        />
-                      </td>
-                      <td>#{cupom.id}</td>
-                      <td>
-                        <span className="cupom-codigo-table">{cupom.codigo}</span>
-                      </td>
-                      <td>
-                        <span className="cupom-desconto-table">
-                          R$ {parseFloat(cupom.desconto).toFixed(2)}
-                        </span>
-                      </td>
-                      <td>
-                        {cupom.validade ? (
-                          <span className="cupom-validade">
-                            {new Date(cupom.validade).toLocaleDateString('pt-BR')}
+                  cupons.map(cupom => {
+                    const isExpirado = cupom.validade && new Date(cupom.validade) < new Date();
+                    const isAtivo = cupom.ativo === 1 || cupom.ativo === true;
+                    
+                    return (
+                      <tr key={cupom.id}>
+                        <td>
+                          <input 
+                            type="checkbox" 
+                            className="cupons-checkbox"
+                            checked={selecionados.includes(cupom.id)}
+                            onChange={() => handleSelecionarCupom(cupom.id)}
+                          />
+                        </td>
+                        <td>#{cupom.id}</td>
+                        <td>
+                          <span className="cupom-codigo-table">{cupom.codigo}</span>
+                        </td>
+                        <td>
+                          <span className="cupom-desconto-table">
+                            R$ {parseFloat(cupom.desconto).toFixed(2)}
                           </span>
-                        ) : (
-                          <span className="cupom-vitalicio">Vitalício</span>
-                        )}
-                      </td>
-                      <td>R$ {parseFloat(cupom.valor_minimo).toFixed(2)}</td>
-                      <td>
-                        <span className={`cupom-status ${cupom.validade && new Date(cupom.validade) < new Date() ? 'inativo' : 'ativo'}`}>
-                          {cupom.validade && new Date(cupom.validade) < new Date() ? 'Expirado' : 'Ativo'}
-                        </span>
-                      </td>
-                    </tr>
-                  ))
+                        </td>
+                        <td>
+                          {cupom.validade ? (
+                            <span className="cupom-validade">
+                              {new Date(cupom.validade).toLocaleDateString('pt-BR')}
+                            </span>
+                          ) : (
+                            <span className="cupom-vitalicio">Vitalício</span>
+                          )}
+                        </td>
+                        <td>R$ {parseFloat(cupom.valor_minimo).toFixed(2)}</td>
+                        <td>
+                          <span className={`cupom-status ${
+                            isExpirado ? 'expirado' : 
+                            isAtivo ? 'ativo' : 'inativo'
+                          }`}>
+                            {isExpirado ? 'Expirado' : 
+                             isAtivo ? 'Ativo' : 'Inativo'}
+                          </span>
+                        </td>
+                        <td>
+                          <button
+                            className={`btn-toggle-status ${isAtivo ? 'ativo' : 'inativo'}`}
+                            onClick={() => toggleStatusCupom(cupom.id)}
+                            disabled={isExpirado}
+                            title={
+                              isExpirado ? 'Não é possível alterar cupom expirado' :
+                              isAtivo ? 'Desativar cupom' : 'Ativar cupom'
+                            }
+                          >
+                            {isAtivo ? '🔴' : '🟢'} {isAtivo ? 'Desativar' : 'Ativar'}
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
-                    <td colSpan="7">
+                    <td colSpan="8">
                       <div className="cupons-empty">
                         <h3>Nenhum cupom encontrado</h3>
                         <p>Comece cadastrando seu primeiro cupom na aba "Cadastrar Cupom"</p>

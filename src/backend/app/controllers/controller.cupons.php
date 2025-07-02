@@ -70,3 +70,42 @@ function vincularCupomProduto() {
     echo json_encode(['success' => $ok]);
     exit;
 }
+
+function toggleCupomStatusController() {
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+    header('Content-Type: application/json');
+    
+    $conn = getDbConnection();
+    $data = json_decode(file_get_contents('php://input'), true);
+    
+    if (!isset($data['id'])) {
+        http_response_code(400);
+        echo json_encode(['error' => 'ID do cupom não informado']);
+        exit;
+    }
+    
+    $success = toggleCupomStatus($conn, $data['id']);
+    
+    if ($success) {
+        // Buscar o status atual do cupom para retornar
+        $stmt = $conn->prepare('SELECT ativo FROM cupons WHERE id = ?');
+        $stmt->execute([$data['id']]);
+        $cupom = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($cupom) {
+            echo json_encode([
+                'success' => true,
+                'ativo' => (bool)$cupom['ativo']
+            ]);
+        } else {
+            http_response_code(404);
+            echo json_encode(['error' => 'Cupom não encontrado']);
+        }
+    } else {
+        http_response_code(500);
+        echo json_encode(['error' => 'Erro ao atualizar status do cupom']);
+    }
+    exit;
+}

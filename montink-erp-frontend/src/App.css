@@ -281,6 +281,97 @@
   color: var(--gray-600);
 }
 
+/* Estilos para autenticação */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: var(--gray-100);
+}
+
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--gray-300);
+  border-top: 3px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--space-md);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Botão de logout */
+.logout-button {
+  background: var(--danger);
+  color: var(--white);
+  border: none;
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 16px;
+  transition: var(--transition);
+  margin-left: var(--space-sm);
+}
+
+.logout-button:hover {
+  background: var(--danger-dark);
+  transform: scale(1.05);
+}
+
+.logout-button:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 2px;
+}
+
+/* User info com logout - atualização */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(10px);
+}
+
+/* Link da loja na sidebar */
+.loja-link {
+  color: var(--accent) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid var(--accent) !important;
+}
+
+.loja-link:hover {
+  background: var(--accent) !important;
+  color: var(--white) !important;
+}
+
+.loja-link span:first-child {
+  color: inherit;
+}
+
+/* Link institucional na sidebar */
+.institucional-link {
+  color: #f6ad55 !important;
+  background: rgba(246, 173, 85, 0.1) !important;
+  border: 1px solid #f6ad55 !important;
+}
+
+.institucional-link:hover {
+  background: #f6ad55 !important;
+  color: var(--white) !important;
+}
+
+.institucional-link span:first-child {
+  color: inherit;
+}
+
 /* Animações específicas do App */
 @keyframes cardFloat {
   0%, 100% { transform: translateY(0px); }
