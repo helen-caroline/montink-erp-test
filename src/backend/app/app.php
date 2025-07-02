@@ -6,8 +6,20 @@ require_once __DIR__ . '/routers/router.cupons.php';
 require_once __DIR__ . '/routers/router.pedidos.php';
 
 function handleRequest() {
+    // Configurações CORS globais
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+    header('Access-Control-Max-Age: 86400');
+    
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     $method = $_SERVER['REQUEST_METHOD'];
+
+    // Responder a requisições OPTIONS (preflight)
+    if ($method === 'OPTIONS') {
+        http_response_code(204);
+        exit;
+    }
 
     // Rotas de produtos
     if (strpos($uri, '/produtos') === 0) {

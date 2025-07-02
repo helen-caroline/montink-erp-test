@@ -16,6 +16,7 @@ const Produtos = () => {
     const [mensagemCadastro, setMensagemCadastro] = useState({ text: '', color: '' });
     const [selecionarTodos, setSelecionarTodos] = useState(false);
     const [produtosSelecionados, setProdutosSelecionados] = useState(new Set());
+    const [estoqueEditando, setEstoqueEditando] = useState({}); // Novo estado para controlar edição
 
     useEffect(() => {
         carregarProdutos();
@@ -30,6 +31,142 @@ const Produtos = () => {
             setSelecionarTodos(false);
         } catch (error) {
             console.error('Erro ao carregar produtos:', error);
+        }
+    };
+
+    // Nova função para atualizar estoque
+    const atualizarEstoque = async (produtoId, novoEstoque) => {
+        try {
+            console.log('Atualizando estoque:', { produtoId, novoEstoque });
+            
+            const response = await fetch(`http://localhost:8000/produtos/update/${produtoId}`, {
+                method: 'PUT',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    estoque: parseInt(novoEstoque) 
+                })
+            });
+
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+            
+            const responseText = await response.text();
+            console.log('Response text:', responseText);
+
+            if (response.ok) {
+                let responseData;
+                try {
+                    responseData = JSON.parse(responseText);
+                } catch (parseError) {
+                    console.error('Erro ao fazer parse do JSON:', parseError);
+                    throw new Error('Resposta inválida do servidor');
+                }
+                
+                // Atualizar produto localmente
+                setProdutos(prev => prev.map(p => 
+                    p.id === produtoId 
+                        ? { ...p, estoque: parseInt(novoEstoque) }
+                        : p
+                ));
+                
+                // Remover do estado de edição
+                setEstoqueEditando(prev => {
+                    const novo = { ...prev };
+                    delete novo[produtoId];
+                    return novo;
+                });
+                
+                // Mostrar mensagem de sucesso
+                setMensagemCadastro({ 
+                    text: '✅ Estoque atualizado com sucesso!', 
+                    color: 'success' 
+                });
+                
+                // Remover mensagem após 3 segundos
+                setTimeout(() => {
+                    setMensagemCadastro({ text: '', color: '' });
+                }, 3000);
+            } else {
+                console.error('Erro na resposta:', responseText);
+                setMensagemCadastro({ 
+                    text: '❌ Erro ao atualizar estoque', 
+                    color: 'error' 
+                });
+                carregarProdutos(); // Recarregar para reverter mudanças
+            }
+        } catch (error) {
+            console.error('Erro ao atualizar estoque:', error);
+            setMensagemCadastro({ 
+                text: '❌ Erro de conexão ao atualizar estoque', 
+                color: 'error' 
+            });
+            carregarProdutos();
+            
+            // Remover mensagem após 5 segundos
+            setTimeout(() => {
+                setMensagemCadastro({ text: '', color: '' });
+            }, 5000);
+        }
+    };
+
+    // Função para iniciar edição do estoque
+    const iniciarEdicaoEstoque = (produtoId, estoqueAtual) => {
+        setEstoqueEditando(prev => ({
+            ...prev,
+            [produtoId]: estoqueAtual.toString()
+        }));
+    };
+
+    // Função para cancelar edição
+    const cancelarEdicaoEstoque = (produtoId) => {
+        setEstoqueEditando(prev => {
+            const novo = { ...prev };
+            delete novo[produtoId];
+            return novo;
+        });
+    };
+
+    // Função para salvar estoque (Enter ou blur)
+    const salvarEstoque = (produtoId) => {
+        const novoEstoque = estoqueEditando[produtoId];
+        if (novoEstoque !== undefined && novoEstoque !== '') {
+            const valor = parseInt(novoEstoque);
+            if (!isNaN(valor) && valor >= 0) {
+                atualizarEstoque(produtoId, valor);
+            } else {
+                setMensagemCadastro({ 
+                    text: '❌ Digite um número válido maior ou igual a 0', 
+                    color: 'error' 
+                });
+                cancelarEdicaoEstoque(produtoId);
+                
+                // Remover mensagem após 3 segundos
+                setTimeout(() => {
+                    setMensagemCadastro({ text: '', color: '' });
+                }, 3000);
+            }
+        } else {
+            cancelarEdicaoEstoque(produtoId);
+        }
+    };
+
+    // Função para lidar com mudanças no input de estoque
+    const handleEstoqueChange = (produtoId, valor) => {
+        setEstoqueEditando(prev => ({
+            ...prev,
+            [produtoId]: valor
+        }));
+    };
+
+    // Função para lidar com teclas no input de estoque
+    const handleEstoqueKeyPress = (e, produtoId) => {
+        if (e.key === 'Enter') {
+            salvarEstoque(produtoId);
+        } else if (e.key === 'Escape') {
+            cancelarEdicaoEstoque(produtoId);
         }
     };
 
@@ -243,7 +380,7 @@ const Produtos = () => {
                                     <th>ID</th>
                                     <th>Nome</th>
                                     <th>Preço</th>
-                                    <th>Estoque</th>
+                                    <th style={{ width: '120px' }}>Estoque</th>
                                     <th>Variações</th>
                                     <th>Cupons</th>
                                 </tr>
@@ -264,16 +401,57 @@ const Produtos = () => {
                                             <td style={{ fontWeight: '500' }}>{produto.nome}</td>
                                             <td>R$ {parseFloat(produto.preco).toFixed(2)}</td>
                                             <td>
-                                                <span style={{ 
-                                                    padding: '4px 8px', 
-                                                    borderRadius: '4px', 
-                                                    backgroundColor: produto.estoque > 10 ? '#e8f5e8' : '#ffebee',
-                                                    color: produto.estoque > 10 ? '#2e7d32' : '#c62828',
-                                                    fontSize: '12px',
-                                                    fontWeight: '500'
-                                                }}>
-                                                    {produto.estoque} un.
-                                                </span>
+                                                {estoqueEditando[produto.id] !== undefined ? (
+                                                    <div className="estoque-edit-container">
+                                                        <input
+                                                            type="number"
+                                                            className="estoque-input"
+                                                            value={estoqueEditando[produto.id]}
+                                                            onChange={(e) => handleEstoqueChange(produto.id, e.target.value)}
+                                                            onBlur={() => salvarEstoque(produto.id)}
+                                                            onKeyDown={(e) => handleEstoqueKeyPress(e, produto.id)}
+                                                            min="0"
+                                                            autoFocus
+                                                        />
+                                                        <div className="estoque-actions">
+                                                            <button 
+                                                                className="estoque-save-btn"
+                                                                onClick={() => salvarEstoque(produto.id)}
+                                                                title="Salvar (Enter)"
+                                                            >
+                                                                ✓
+                                                            </button>
+                                                            <button 
+                                                                className="estoque-cancel-btn"
+                                                                onClick={() => cancelarEdicaoEstoque(produto.id)}
+                                                                title="Cancelar (Esc)"
+                                                            >
+                                                                ✕
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <button 
+                                                        className="estoque-display"
+                                                        onClick={() => iniciarEdicaoEstoque(produto.id, produto.estoque)}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter' || e.key === ' ') {
+                                                                e.preventDefault();
+                                                                iniciarEdicaoEstoque(produto.id, produto.estoque);
+                                                            }
+                                                        }}
+                                                        title="Clique para editar estoque"
+                                                        aria-label={`Editar estoque do produto ${produto.nome}, quantidade atual: ${produto.estoque}`}
+                                                    >
+                                                        <span className={`estoque-badge ${
+                                                            produto.estoque > 10 ? 'success' : 
+                                                            produto.estoque > 0 ? 'warning' : 'danger'
+                                                        }`}>
+                                                            {produto.estoque} un.
+                                                        </span>
+                                                        <span className="edit-icon">✏️</span>
+                                                    </button>
+                                                )}
                                             </td>
                                             <td>
                                                 {produto.variacoes && produto.variacoes.length > 0 ? (

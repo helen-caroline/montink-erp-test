@@ -6,11 +6,17 @@ function handleProdutosRoutes($uri, $method) {
     // Suporte a CORS para preflight (OPTIONS)
     if ($method === 'OPTIONS') {
         header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+        header('Access-Control-Max-Age: 86400'); // 24 horas
         http_response_code(204);
         exit;
     }
+    
+    // Adicionar cabeçalhos CORS para todas as requisições
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 
     if ($uri === '/produtos' && $method === 'GET') {
         header('Access-Control-Allow-Origin: *');
@@ -50,7 +56,7 @@ function handleProdutosRoutes($uri, $method) {
     }
 
     // Rotas : UPDATE
-    if (preg_match('#^/produtos/update/(\d+)$#', $uri, $matches) && $method === 'PUT' || $method === 'PATH' || $method === 'POST') {
+    if (preg_match('#^/produtos/update/(\d+)$#', $uri, $matches) && ($method === 'PUT' || $method === 'PATCH' || $method === 'POST')) {
         updateProduto((int)$matches[1]);
         return;
     }

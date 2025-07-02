@@ -1,3 +1,133 @@
+/* Edição de Estoque */
+.estoque-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+  background: none;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.estoque-display:hover {
+  background-color: var(--gray-100);
+}
+
+.estoque-display:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+.estoque-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.estoque-badge.success {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+}
+
+.estoque-badge.warning {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.estoque-badge.danger {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.edit-icon {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.estoque-edit-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.estoque-input {
+  width: 60px;
+  padding: 4px 8px;
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  text-align: center;
+  background: var(--white);
+  box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.estoque-input:focus {
+  outline: none;
+  border-color: var(--primary-hover);
+}
+
+.estoque-actions {
+  display: flex;
+  gap: 2px;
+}
+
+.estoque-save-btn,
+.estoque-cancel-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  line-height: 1;
+  transition: var(--transition);
+  min-width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.estoque-save-btn {
+  color: var(--success);
+}
+
+.estoque-save-btn:hover {
+  background-color: var(--success-light);
+}
+
+.estoque-cancel-btn {
+  color: var(--error);
+}
+
+.estoque-cancel-btn:hover {
+  background-color: var(--error-light);
+}
+
+/* Responsividade para estoque */
+@media (max-width: 768px) {
+  .estoque-display {
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+  }
+  
+  .estoque-edit-container {
+    flex-wrap: wrap;
+  }
+  
+  .estoque-input {
+    width: 50px;
+  }
+}
+
 /* Estoque - Design profissional */
 .produtos-container {
   padding: 32px;
